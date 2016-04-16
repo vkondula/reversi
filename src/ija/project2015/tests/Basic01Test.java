@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * Test 2. ukolu.
  * @author koci
  */
-public class Homework2Test {
+public class Basic01Test {
 
     @Test
     public void testPlayer() {
