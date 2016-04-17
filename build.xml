@@ -28,9 +28,19 @@
 
         <target name="run" depends="compile">
                 <java fork="true" jar="dest/reversi.jar">
-                    <arg line="Basic01Test"/>
+                    <arg line="ija.project2015.tests.Basic01Test"/>
                 </java>
         </target>
+
+        <javadoc packagenames="ija.project2015.*"
+                 sourcepath="src"
+                 excludepackagenames="ija.project2015.tests.*"
+                 defaultexcludes="yes"
+                 destdir="doc"
+                 author="true"
+                 version="true"
+                 use="true"
+                 windowtitle="Test API"/>
 
 
 </project>
