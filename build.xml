@@ -5,7 +5,6 @@
         <target name="clean">
                 <delete dir="build"/>
                 <delete dir="desc"/>
-                <delete dir="doc"/>
         </target>
 
         <target name="compile">
