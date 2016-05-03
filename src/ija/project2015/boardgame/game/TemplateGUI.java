@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicMenuBarUI;
 
@@ -40,7 +41,8 @@ public class TemplateGUI extends JFrame implements ActionListener {
 	private JLabel lblOponent;
 	private JLabel lblSize;
 	private ButtonGroup selectOponent;
-	private JRadioButtonMenuItem oponentComputer;
+	private JRadioButtonMenuItem oponentAlgoritm1;
+	private JRadioButtonMenuItem oponentAlgoritm2;
 	private JRadioButtonMenuItem oponentPlayer;
 	private ButtonGroup selectFieldSize;
 	private JRadioButtonMenuItem sizeSix;
@@ -90,8 +92,12 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		lblOponent.setPreferredSize(new Dimension(itemWidth,itemHeight));
 		
 		selectOponent = new ButtonGroup();
-		oponentComputer = new JRadioButtonMenuItem("Computer");
-		oponentComputer.setPreferredSize(new Dimension(itemWidth, itemHeight));
+		oponentAlgoritm1 = new JRadioButtonMenuItem("Algoritm 1");
+		oponentAlgoritm1.setPreferredSize(new Dimension(itemWidth, itemHeight));
+		
+		oponentAlgoritm2 = new JRadioButtonMenuItem("Algoritm 1");
+		oponentAlgoritm2.setPreferredSize(new Dimension(itemWidth, itemHeight));
+		
 		oponentPlayer = new JRadioButtonMenuItem("Another Player");
 		oponentPlayer.setPreferredSize(new Dimension(itemWidth, itemHeight));
 		
@@ -125,17 +131,18 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		C = new JLabel("C");
 		C.setPreferredSize(new Dimension(itemWidth, itemHeight));
 		
-		setI = new TextField("Time between freezes");
-		setI.setPreferredSize(new Dimension(itemWidth,itemHeight));
-		setI.addActionListener(this);
-		
-		setC = new TextField("Number Of Stones");
-		setC.setPreferredSize(new Dimension(itemWidth,itemHeight));
-		setC.addActionListener(this);
-		
-		setB = new TextField("Freeze Time");
-		setB.setPreferredSize(new Dimension(itemWidth,itemHeight));
-		setB.addActionListener(this);
+//		setI = new TextField("Time between freezes");
+//		setI.setPreferredSize(new Dimension(itemWidth,itemHeight));
+//		setI.addActionListener(this);
+//		setI.setEnabled(false);
+//		
+//		setC = new TextField("Number Of Stones");
+//		setC.setPreferredSize(new Dimension(itemWidth,itemHeight));
+//		setC.addActionListener(this);
+//		
+//		setB = new TextField("Freeze Time");
+//		setB.setPreferredSize(new Dimension(itemWidth,itemHeight));
+//		setB.addActionListener(this);
 		
 		final int size = 60;
 		final int paneSize = x*size;
@@ -181,9 +188,12 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		menu.addSeparator();
 		menu.add(lblOponent);
 		
-		oponentComputer.setSelected(true);
-		selectOponent.add(oponentComputer);
-		menu.add(oponentComputer);
+		oponentAlgoritm1.setSelected(true);
+		selectOponent.add(oponentAlgoritm1);
+		menu.add(oponentAlgoritm1);
+		
+		selectOponent.add(oponentAlgoritm2);
+		menu.add(oponentAlgoritm2);
 
 		selectOponent.add(oponentPlayer);
 		menu.add(oponentPlayer);
@@ -209,13 +219,29 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		
 		menu.add(freezer);
 		menu.add(I);
-		menu.add(setI);
+		JSlider Islider = new JSlider(JSlider.HORIZONTAL, 0, 20, 10);
+		Islider.setMajorTickSpacing(5);
+		Islider.setMinorTickSpacing(1);
+		Islider.setPaintLabels(true);
+		Islider.setPaintTicks(true);
+		
+		menu.add(Islider);
+		JSlider Cslider = new JSlider(JSlider.HORIZONTAL, 0, 20, 10);
+		Cslider.setMajorTickSpacing(5);
+		Cslider.setMinorTickSpacing(1);
+		Cslider.setPaintLabels(true);
+		Cslider.setPaintTicks(true);
 		
 		menu.add(C);
-		menu.add(setC);
+		menu.add(Cslider);
+		JSlider Bslider = new JSlider(JSlider.HORIZONTAL, 0, 20, 10);
+		Bslider.setMajorTickSpacing(5);
+		Bslider.setMinorTickSpacing(1);
+		Bslider.setPaintLabels(true);
+		Bslider.setPaintTicks(true);
 		
 		menu.add(B);
-		menu.add(setB);
+		menu.add(Bslider);
 		
 		menu.addSeparator();
 		menu.add(exitGame);
