@@ -72,33 +72,49 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		
 		createGame = new JMenuItem("Create Game");
 		createGame.setPreferredSize(new Dimension(itemWidth, itemHeight));
+		createGame.addActionListener(this);
+		
 		saveGame = new JMenuItem("Save Game");
 		saveGame.setPreferredSize(new Dimension(itemWidth, itemHeight));
+		saveGame.addActionListener(this);
+		
 		loadGame = new JMenuItem("Load Game");
 		loadGame.setPreferredSize(new Dimension(itemWidth, itemHeight));
+		loadGame.addActionListener(this);
+		
 		exitGame = new JMenuItem("Exit Game");
 		exitGame.setPreferredSize(new Dimension(itemWidth, itemHeight));
-		
+		exitGame.addActionListener(this);
 		
 		lblOponent = new JLabel("Select Oponent");
 		lblOponent.setPreferredSize(new Dimension(itemWidth,itemHeight));
-		lblSize = new JLabel("Select Size");
+		
 		selectOponent = new ButtonGroup();
 		oponentComputer = new JRadioButtonMenuItem("Computer");
 		oponentComputer.setPreferredSize(new Dimension(itemWidth, itemHeight));
 		oponentPlayer = new JRadioButtonMenuItem("Another Player");
 		oponentPlayer.setPreferredSize(new Dimension(itemWidth, itemHeight));
 		
+		lblSize = new JLabel("Select Size");
 		selectFieldSize = new ButtonGroup();
+		
 		sizeSix = new JRadioButtonMenuItem("6x6");
+		sizeSix.addActionListener(this);
 		sizeSix.setPreferredSize(new Dimension(itemWidth, itemHeight));
+		
 		sizeEight = new JRadioButtonMenuItem("8x8");
 		sizeEight.setPreferredSize(new Dimension(itemWidth, itemHeight));
+		sizeEight.addActionListener(this);
+		
 		sizeTen = new JRadioButtonMenuItem("10x10");
 		sizeTen.setPreferredSize(new Dimension(itemWidth, itemHeight));
+		sizeTen.addActionListener(this);
+		
 		sizeTwelve = new JRadioButtonMenuItem("12x12");
 		sizeTwelve.setPreferredSize(new Dimension(itemWidth, itemHeight));
-		info = new JLabel("Whote's turn");
+		sizeTwelve.addActionListener(this);
+		
+		info = new JLabel("White's turn");
 		freezer = new JCheckBox("Freeze stones", false);
 		freezer.setPreferredSize(new Dimension(itemWidth, itemHeight));
 		
@@ -111,10 +127,15 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		
 		setI = new TextField("Time between freezes");
 		setI.setPreferredSize(new Dimension(itemWidth,itemHeight));
+		setI.addActionListener(this);
+		
 		setC = new TextField("Number Of Stones");
 		setC.setPreferredSize(new Dimension(itemWidth,itemHeight));
+		setC.addActionListener(this);
+		
 		setB = new TextField("Freeze Time");
 		setB.setPreferredSize(new Dimension(itemWidth,itemHeight));
+		setB.addActionListener(this);
 		
 		final int size = 60;
 		final int paneSize = x*size;
@@ -137,9 +158,8 @@ public class TemplateGUI extends JFrame implements ActionListener {
 			{	
 				btnFields[i][j] = new JButton(String.valueOf(i)+String.valueOf(j));
 				btnFields[i][j].setBackground(new Color(0,102,153));
+				btnFields[i][j].addActionListener(this);
 				boardPanel.add(btnFields[i][j], "cell " + String.valueOf(i)+ " " + String.valueOf(j) +" ,grow");
-				
-				
 			}
 		}
 		
@@ -175,7 +195,6 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		selectFieldSize.add(sizeSix);
 		menu.add(sizeSix);
 
-		sizeEight.setSelected(true);
 		selectFieldSize.add(sizeEight);
 		menu.add(sizeEight);
 		
@@ -198,8 +217,6 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		menu.add(B);
 		menu.add(setB);
 		
-		
-
 		menu.addSeparator();
 		menu.add(exitGame);
 		
@@ -212,56 +229,25 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		    }
 		} );
 		
+		switch (this.boardSize) {
+		case 6:
+			sizeSix.setSelected(true);
+			break;
+		case 8:
+			sizeEight.setSelected(true);
+			break;
+		case 10:
+			sizeTen.setSelected(true);
+			break;
+		case 12:
+			sizeTwelve.setSelected(true);
+			break;
+		default:
+			break;
+		}
+		
 		this.setVisible(true);	
-		
-		exitGame.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-				
-			}
-		});
-		
-		createGame.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new TemplateGUI(boardSize);
-			}
-		});
-		
-		sizeSix.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				boardSize = 6;
-			}
-		});
-		
-		sizeEight.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				boardSize = 8;
-			}
-		});
-		
-		sizeTen.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				boardSize = 10;
-			}
-		});
-		
-		sizeTwelve.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				boardSize = 12;
-			}
-		});
+	
 	}
 	
 	
@@ -282,9 +268,30 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		{
 			this.setBoardSize(6);
 		}
+		
+		if (e.getSource() == this.sizeEight)
+		{
+			this.setBoardSize(8);
+		}
+		
+		if (e.getSource() == this.sizeTen)
+		{
+			this.setBoardSize(10);
+		}
+		
+		if (e.getSource() == this.sizeTwelve)
+		{
+			this.setBoardSize(12);
+		}
+		
 		if (e.getSource() == this.createGame)
 		{
 			new TemplateGUI(this.boardSize);
+		}
+		
+		if (e.getSource() == this.exitGame)
+		{
+			this.dispose();
 		}
 		
 	}
