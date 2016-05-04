@@ -27,5 +27,8 @@ public class BorderField implements Field {
 	public int getCol(){
 		return 0;
 	}
+	public void removeDisk(){
+
+	}
 	
 }

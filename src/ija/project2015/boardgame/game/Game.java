@@ -18,6 +18,7 @@ public class Game {
 			black = player;
 		} else return false;
 		player.init(board);
+		board.historyClear();
 		return true;
 	}
 	

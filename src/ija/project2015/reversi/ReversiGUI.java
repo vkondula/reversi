@@ -18,6 +18,7 @@ import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 
 import java.awt.Color;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -32,6 +33,7 @@ import ija.project2015.boardgame.board.Board;
 import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.game.Rules;
 import ija.project2015.reversi.ReversiRules;
+import ija.project2015.reversi.AI;
 import ija.project2015.boardgame.game.Player;
 import ija.project2015.reversi.FieldButton;
 
@@ -73,9 +75,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private Game game;
 	private Player white;
 	private Player black;
+	private boolean playing = true;
 	
 	
-	public ReversiGUI(int x) {
+	public ReversiGUI(int x, int alg) {
 		
 		final int itemWidth = 200;
 		final int itemHeight = 30; 
@@ -85,8 +88,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		board = new Board(rules);
 		game = new Game(board);
 		black = new Player(false);
-		if (false){  // TODO: Doplnit AI algoritmy
-			// white = AI(alg);
+		if (alg != 0){  
+			white = new AI(true, alg);
 		} else {
 			white = new Player(true);
 		}
@@ -121,10 +124,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		lblOponent.setPreferredSize(new Dimension(itemWidth,itemHeight));
 		
 		selectOponent = new ButtonGroup();
-		oponentAlgoritm1 = new JRadioButtonMenuItem("Algoritm 1");
+		oponentAlgoritm1 = new JRadioButtonMenuItem("Easy");
 		oponentAlgoritm1.setPreferredSize(new Dimension(itemWidth, itemHeight));
 		
-		oponentAlgoritm2 = new JRadioButtonMenuItem("Algoritm 1");
+		oponentAlgoritm2 = new JRadioButtonMenuItem("Hard");
 		oponentAlgoritm2.setPreferredSize(new Dimension(itemWidth, itemHeight));
 		
 		oponentPlayer = new JRadioButtonMenuItem("Another Player");
@@ -206,6 +209,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		menuBar.setLayout(new MigLayout("","[grow]"));
 		
 		btnUndo.setBackground(Color.GRAY);
+		btnUndo.addActionListener(this);
 		menuBar.add(this.btnUndo,"cell 0 0,baseline");
 		
 		menuBar.add(menu, "cell 1 0,center");
@@ -323,7 +327,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		
 		System.out.println("Hello World");
-		new ReversiGUI(8);
+		new ReversiGUI(8, 1);
 	}
 
 
@@ -350,9 +354,21 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			this.setBoardSize(12);
 		}
 		
+		if (e.getSource() == this.btnUndo){
+			undoTurn();
+			undoTurn();
+		}
+		
 		if (e.getSource() == this.createGame)
 		{
-			new ReversiGUI(this.boardSize);
+			int alg = 0;
+			if (oponentAlgoritm1.isSelected()){
+				alg = 1;
+			}
+			else if (oponentAlgoritm2.isSelected()){
+				alg = 2;
+			}
+			new ReversiGUI(this.boardSize, alg);
 		}
 		
 		if (e.getSource() == this.exitGame)
@@ -362,23 +378,14 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		
 		if (e.getSource() instanceof FieldButton){
 			FieldButton button = (FieldButton) e.getSource();
-			int i = button.getI();
-			int j = button.getJ();
-			System.out.println(String.valueOf(i)+"/"+String.valueOf(j));
-			if (game.currentPlayer().canPutDisk(board.getField(i, j))){
-				game.currentPlayer().putDisk(board.getField(i, j));
-				ArrayList<Field> turned = rules.getTurned();
-				for (Field toTurn : turned){
-					setColor(toTurn.getRow(), toTurn.getCol(), game.currentPlayer().isWhite()); 
-				}
-				setColor(i,j,game.currentPlayer().isWhite());
-				messageTurn(game.nextPlayer().isWhite());
+			Field selected = board.getField(button.getI(), button.getJ());
+			if (game.currentPlayer().canPutDisk(selected)){
+				resolveTurn(selected);
 			} else {
 				info.setText(game.currentPlayer() + ": Can't put disk there");
 			}		
 			
 		}
-		
 	}
 
 	public int getBoardSize() {
@@ -397,11 +404,61 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		this.boardSize = boardSize;
 	}
 	
-	private void messageTurn(Boolean white){
+	protected void messageTurn(Boolean white){
 		if (white)
 			info.setText("White player's turn");
 		else
 			info.setText("Black player's turn");
 	}
 	
+	protected void resolveTurn(Field selected){
+		game.currentPlayer().putDisk(selected);
+		ArrayList<Field> turned = rules.getTurned();
+		for (Field toTurn : turned){
+			setColor(toTurn.getRow(), toTurn.getCol(), game.currentPlayer().isWhite()); 
+		}
+		setColor(selected.getRow(),selected.getCol(), game.currentPlayer().isWhite());
+		Player onTurn = game.nextPlayer(); 
+		if (!onTurn.canPlay()){
+			onTurn = game.nextPlayer();
+			if (!onTurn.canPlay()){
+				gameOver();
+				return;
+			}
+		}
+		if (onTurn instanceof AI){
+			Field toPlay = ((AI)onTurn).getField();
+			resolveTurn(toPlay);
+		}
+		if (playing)
+			messageTurn(game.currentPlayer().isWhite());
+	}
+	
+	protected void gameOver(){
+		playing = false;
+		info.setText("GAMEOVER");
+		for	(int i=0; i<boardSize; i++){
+			for	(int j=0; j<boardSize; j++){	
+				btnFields[i][j].setEnabled(false);
+			}
+		}
+		// TODO: vyskakovaci okno s vitezem
+		System.out.println("GAME OVER");
+	}
+	
+	protected void undoTurn(){
+		ArrayList<Field> fields = board.undoTurn();
+		if (fields == null) return;
+		Field remove = fields.get(fields.size()-1);
+		fields.remove(fields.size()-1);
+		remove.removeDisk();
+		for (Field toTurn : fields){
+			toTurn.getDisk().turn();
+			boolean white = toTurn.getDisk().isWhite();
+			setColor(toTurn.getRow(), toTurn.getCol(), white);
+		}
+		// TODO: ZMENIT NA ODSTRANENI IKONKY!!!
+		btnFields[remove.getRow()-1][remove.getCol()-1].setBackground(new Color(0,102,153));
+		
+	}
 }

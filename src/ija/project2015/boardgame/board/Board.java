@@ -1,12 +1,16 @@
 package ija.project2015.boardgame.board;
+import java.util.ArrayList;
+
 import ija.project2015.boardgame.game.Rules;
 
 public class Board {
 	protected int size;
 	protected Field[][] board;
 	protected Rules rules = null;
+	protected ArrayList<ArrayList<Field>> history;
 	public Board(Rules rules){
 		this.rules = rules;
+		this.history = new ArrayList<ArrayList<Field>>();
 		this.size = rules.getSize();
 		this.board = new Field[size+2][size+2];
 		for (int i=0; i<size+2; i++){
@@ -68,5 +72,22 @@ public class Board {
 			map+="\n";
 		}
 		return map;
+	}
+	
+	public void addTurn(Field field, ArrayList<Field> turned){
+		ArrayList<Field> tmp = new ArrayList<Field>(turned);
+		tmp.add(field);
+		history.add(tmp);
+	}
+	
+	public ArrayList<Field> undoTurn(){
+		if (history.size() == 0) return null;
+		ArrayList<Field> retval = history.get(history.size()-1);
+		history.remove(history.size()-1);
+		return retval;
+	}
+	
+	public void historyClear(){
+		history = new ArrayList<ArrayList<Field>>();
 	}
 }

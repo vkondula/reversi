@@ -7,6 +7,7 @@ public class Player {
 	protected boolean white;
 	protected Rules rules = null;
 	protected int pool = 0;
+	protected Board board;
 	public Player(boolean isWhite){
 		this.white = isWhite;
 	}
@@ -31,11 +32,13 @@ public class Player {
 		pool -= 1;
 		Disk disk = new Disk(white);
 		boolean retval = field.putDisk(disk);
-		rules.postPhase(field);
+		board.addTurn(field, rules.getTurned());
+		//rules.postPhase(field);
 		return retval;
 	}
 	
 	public void init(Board board){
+		this.board = board;
 		rules = board.getRules();
 		pool = rules.numberDisks();
 		int[][] coor = rules.getLayout(white);
@@ -46,9 +49,21 @@ public class Player {
 		}
 	}
 	
+	public boolean canPlay(){
+		int size = board.getSize();
+		for (int i=1; i<size+1; i++){
+			for (int j=1; j<size+1; j++){
+				if (canPutDisk(board.getField(i, j))){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public String toString(){
-		if(white) return "white";
-		else return "black";
+		if(white) return "White";
+		else return "Black";
 	}
 }
