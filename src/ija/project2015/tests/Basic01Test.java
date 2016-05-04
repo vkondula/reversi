@@ -10,7 +10,7 @@ import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.game.Rules;
 import ija.project2015.boardgame.game.Game;
 import ija.project2015.boardgame.game.Player;
-import ija.project2015.reversi.rules.ReversiRules;
+import ija.project2015.reversi.ReversiRules;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

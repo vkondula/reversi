@@ -1,4 +1,4 @@
-package ija.project2015.reversi.rules;
+package ija.project2015.reversi;
 import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.board.BoardField;
 import ija.project2015.boardgame.game.Rules;
