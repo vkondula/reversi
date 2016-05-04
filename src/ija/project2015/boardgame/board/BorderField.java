@@ -21,5 +21,11 @@ public class BorderField implements Field {
 	public boolean	isEmpty(){
 		return false;
 	}
+	public int getRow(){
+		return 0;
+	}
+	public int getCol(){
+		return 0;
+	}
 	
 }

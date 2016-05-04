@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
@@ -27,6 +29,7 @@ import javax.swing.JMenu;
 
 import ija.project2015.boardgame.game.Game;
 import ija.project2015.boardgame.board.Board;
+import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.game.Rules;
 import ija.project2015.reversi.ReversiRules;
 import ija.project2015.boardgame.game.Player;
@@ -87,6 +90,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		} else {
 			white = new Player(true);
 		}
+		game.addPlayer(black);
+		game.addPlayer(white);
 			
 		
 		btnUndo = new JButton("Undo");
@@ -144,7 +149,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		sizeTwelve.setPreferredSize(new Dimension(itemWidth, itemHeight));
 		sizeTwelve.addActionListener(this);
 		
-		info = new JLabel("White's turn");
+		info = new JLabel("Black player's turn");
 		freezer = new JCheckBox("Freeze stones", false);
 		freezer.setPreferredSize(new Dimension(itemWidth, itemHeight));
 		
@@ -298,6 +303,17 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		
 		this.setVisible(true);	
 	
+		// GAME RELATED CODE
+		// set starting stones
+		// white
+		int [][] fields = rules.getLayout(true);
+		setColor(fields[0][0], fields[0][1], true);
+		setColor(fields[1][0], fields[1][1], true);
+		// black
+		fields = rules.getLayout(false);
+		setColor(fields[0][0], fields[0][1], false);
+		setColor(fields[1][0], fields[1][1], false);
+		
 	}
 	
 	
@@ -349,6 +365,18 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			int i = button.getI();
 			int j = button.getJ();
 			System.out.println(String.valueOf(i)+"/"+String.valueOf(j));
+			if (game.currentPlayer().canPutDisk(board.getField(i, j))){
+				game.currentPlayer().putDisk(board.getField(i, j));
+				ArrayList<Field> turned = rules.getTurned();
+				for (Field toTurn : turned){
+					setColor(toTurn.getRow(), toTurn.getCol(), game.currentPlayer().isWhite()); 
+				}
+				setColor(i,j,game.currentPlayer().isWhite());
+				messageTurn(game.nextPlayer().isWhite());
+			} else {
+				info.setText(game.currentPlayer() + ": Can't put disk there");
+			}		
+			
 		}
 		
 	}
@@ -357,9 +385,23 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		return boardSize;
 	}
 
-
+	private void setColor(int i, int j, Boolean white){
+		if (white){
+			btnFields[i-1][j-1].setBackground(Color.WHITE);
+		} else {
+			btnFields[i-1][j-1].setBackground(Color.BLACK);
+		}
+	}
+	
 	public void setBoardSize(int boardSize) {
 		this.boardSize = boardSize;
+	}
+	
+	private void messageTurn(Boolean white){
+		if (white)
+			info.setText("White player's turn");
+		else
+			info.setText("Black player's turn");
 	}
 	
 }

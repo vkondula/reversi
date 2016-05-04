@@ -29,7 +29,7 @@ public class BoardField implements Field{
 	public boolean putDisk(Disk disk){
 		if (this.disk==null){
 			this.disk = disk;
-			rules.postPhase(this);
+			// rules.postPhase(this);
 			return true;
 		} else {
 			return false;

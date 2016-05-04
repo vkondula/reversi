@@ -7,6 +7,8 @@ public interface Field{
 	Disk getDisk();
 	boolean	isEmpty();
 	boolean	canPutDisk(Disk disk);
+	int getRow();
+	int getCol();
 	public static enum Direction{
 		L,D,R,U,LD,LU,RD,RU;
 	}

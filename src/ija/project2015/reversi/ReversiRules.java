@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class ReversiRules implements Rules{
 	protected int size;
+	protected ArrayList<Field> turned;
 	public ReversiRules(int size){
 		this.size = size;
 	}
@@ -75,7 +76,7 @@ public class ReversiRules implements Rules{
 		Disk disk = field.getDisk();
 		if(disk==null) return;
 		Boolean white = disk.isWhite();
-		ArrayList<Field> turned = new ArrayList<Field>();
+		turned = new ArrayList<Field>();
 		for (Field.Direction dirs : Field.Direction.values()){
 			ArrayList<Field> buffer = new ArrayList<Field>();
 			boolean ready = false;
@@ -102,4 +103,8 @@ public class ReversiRules implements Rules{
 		}
 		
 	}
+	
+    public ArrayList<Field> getTurned() {
+        return turned;
+    }
 }
