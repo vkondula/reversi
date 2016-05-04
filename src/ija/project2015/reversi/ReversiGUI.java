@@ -1,4 +1,4 @@
-package ija.project2015.boardgame.game;
+package ija.project2015.reversi;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,7 +25,14 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 
-public class TemplateGUI extends JFrame implements ActionListener {
+import ija.project2015.boardgame.game.Game;
+import ija.project2015.boardgame.board.Board;
+import ija.project2015.boardgame.game.Rules;
+import ija.project2015.reversi.ReversiRules;
+import ija.project2015.boardgame.game.Player;
+import ija.project2015.reversi.FieldButton;
+
+public class ReversiGUI extends JFrame implements ActionListener {
 	
 	private int boardSize;
 	
@@ -58,12 +65,29 @@ public class TemplateGUI extends JFrame implements ActionListener {
 	private TextField setB;
 	private TextField setC;
 	
+	private Rules rules;
+	private Board board;
+	private Game game;
+	private Player white;
+	private Player black;
 	
-	public TemplateGUI(int x) {
+	
+	public ReversiGUI(int x) {
 		
 		final int itemWidth = 200;
 		final int itemHeight = 30; 
 		this.boardSize = x;
+		// Game related objects
+		rules = new ReversiRules(x);
+		board = new Board(rules);
+		game = new Game(board);
+		black = new Player(false);
+		if (false){  // TODO: Doplnit AI algoritmy
+			// white = AI(alg);
+		} else {
+			white = new Player(true);
+		}
+			
 		
 		btnUndo = new JButton("Undo");
 		boardPanel = new JPanel();
@@ -163,7 +187,7 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		{
 			for	(int j=0; j<x; j++)
 			{	
-				btnFields[i][j] = new JButton(String.valueOf(i)+String.valueOf(j));
+				btnFields[i][j] = new FieldButton(String.valueOf(i)+String.valueOf(j), i+1, j+1);
 				btnFields[i][j].setBackground(new Color(0,102,153));
 				btnFields[i][j].addActionListener(this);
 				boardPanel.add(btnFields[i][j], "cell " + String.valueOf(i)+ " " + String.valueOf(j) +" ,grow");
@@ -283,7 +307,7 @@ public class TemplateGUI extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		
 		System.out.println("Hello World");
-		new TemplateGUI(8);
+		new ReversiGUI(8);
 	}
 
 
@@ -312,12 +336,19 @@ public class TemplateGUI extends JFrame implements ActionListener {
 		
 		if (e.getSource() == this.createGame)
 		{
-			new TemplateGUI(this.boardSize);
+			new ReversiGUI(this.boardSize);
 		}
 		
 		if (e.getSource() == this.exitGame)
 		{
 			this.dispose();
+		}
+		
+		if (e.getSource() instanceof FieldButton){
+			FieldButton button = (FieldButton) e.getSource();
+			int i = button.getI();
+			int j = button.getJ();
+			System.out.println(String.valueOf(i)+"/"+String.valueOf(j));
 		}
 		
 	}

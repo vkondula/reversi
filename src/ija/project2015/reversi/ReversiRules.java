@@ -44,8 +44,7 @@ public class ReversiRules implements Rules{
 	}
 	
 	public boolean whiteStart(){
-		//FIXME: it's against Reversi rules
-		return true;
+		return false;
 	}
 	
 	public boolean canPutDisk(Field field, Disk disk){
