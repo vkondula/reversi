@@ -99,6 +99,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private int I;
 	private int boardSize;
 	private int alg;
+	private boolean isWhite;
 	
 	/** Method initiates new Interface and also new game 
 	 *
@@ -108,13 +109,14 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	 * @param c number of stones frozen
 	 * @param y is time between freezes
 	 */
-	public ReversiGUI(int x, int alg, int b, int c, int y) {
+	public ReversiGUI(int x, int alg, boolean isWhite, int b, int c, int y) {
 		
 		this.boardSize = x;
 		this.B = b;
 		this.C = c;
 		this.I = y;
 		this.alg = alg;
+		this.isWhite = isWhite;
 		
 		JSeparator optionSep = new JSeparator();
 		JSeparator optionSep2 = new JSeparator();
@@ -129,11 +131,11 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		rules = new ReversiRules(x);
 		board = new Board(rules);
 		game = new Game(board);
-		black = new Player(false);
+		black = new Player(isWhite);
 		if (alg != 0){  
-			white = new AI(true, alg);
+			white = new AI(!isWhite, alg);
 		} else {
-			white = new Player(true);
+			white = new Player(!isWhite);
 		}
 		game.addPlayer(black);
 		game.addPlayer(white);
@@ -203,7 +205,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		saveGame = new JButton("Save Game");
 		saveGame.addActionListener(this);
 		saveGame.setPreferredSize(new Dimension(100, 20));
-		exitGame = new JButton("exit Game");
+		exitGame = new JButton("Exit Game");
 		exitGame.addActionListener(this);
 		exitGame.setPreferredSize(new Dimension(100, 20));
 		
@@ -217,12 +219,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		controlPanel.add(exitGame, "cell 2 1,growx, span");
 
 		selectOponent = new ButtonGroup();
-		oponentAlgoritm1 = new JRadioButtonMenuItem("Algoritm 1");
+		oponentAlgoritm1 = new JRadioButtonMenuItem("Easy");
 		oponentAlgoritm1.addActionListener(this);
 		oponentAlgoritm1.setBackground(customBlueBackground);
 		oponentAlgoritm1.setForeground(Color.WHITE);
 
-		oponentAlgoritm2 = new JRadioButtonMenuItem("Algoritm 2");
+		oponentAlgoritm2 = new JRadioButtonMenuItem("Hard");
 		oponentAlgoritm2.addActionListener(this);
 		oponentAlgoritm2.setBackground(customBlueBackground);
 		oponentAlgoritm2.setForeground(Color.WHITE);
@@ -352,13 +354,13 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		
 		switch (alg) {
 		case 0:
-			oponentAlgoritm1.setSelected(true);
+			oponentPlayer.setSelected(true);
 			break;
 		case 1:
-			oponentAlgoritm2.setSelected(true);
+			oponentAlgoritm1.setSelected(true);
 			break;
 		case 2:
-			oponentPlayer.setSelected(true);
+			oponentAlgoritm2.setSelected(true);
 			break;
 		default:
 			break;
@@ -379,7 +381,13 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			spinI.setEnabled(false);
 		}
 		this.setVisible(true);	
-	
+		
+		if(isWhite){
+			whiteStones.setSelected(true);
+		} else {
+			blackStones.setSelected(true);
+		}
+		
 		// GAME RELATED CODE
 		// set starting stones
 		// white
@@ -390,6 +398,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		fields = rules.getLayout(false);
 		setColor(fields[0][0], fields[0][1], false);
 		setColor(fields[1][0], fields[1][1], false);
+		// if AI starts, make move
+		Player onTurn = game.currentPlayer();
+		if (onTurn instanceof AI){
+			Field toPlay = ((AI)onTurn).getField();
+			resolveTurn(toPlay);
+		}
 		
 	}
 	
@@ -399,41 +413,49 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		if (e.getSource() == this.sizeSix)
-		{
-			this.setBoardSize(6);
+		if (e.getSource() == this.whiteStones){
+			this.isWhite = true;
 		}
 		
-		if (e.getSource() == this.sizeEight)
-		{
+		if (e.getSource() == this.blackStones){
+			this.isWhite= false;
+		}
+		
+		if (e.getSource() == this.sizeEight){
 			this.setBoardSize(8);
 		}
 		
-		if (e.getSource() == this.sizeTen)
-		{
+		if (e.getSource() == this.sizeTen){
 			this.setBoardSize(10);
 		}
 		
-		if (e.getSource() == this.sizeTwelve)
-		{
+		if (e.getSource() == this.sizeTwelve){
 			this.setBoardSize(12);
 		}
 		
 		if (e.getSource() == this.btnUndo){
-			undoTurn();
-			undoTurn();
+			if (undoTurn()) game.nextPlayer();
+			if (undoTurn()) game.nextPlayer();
+			Player onTurn = game.currentPlayer();
+			messageTurn(onTurn.isWhite());
+			if (onTurn instanceof AI){
+				Field toPlay = ((AI)onTurn).getField();
+				resolveTurn(toPlay);
+			}
+			
+			
 		}
 		
-		if (e.getSource() == this.createGame)
-		{
+		if (e.getSource() == this.createGame){
+			if (!board.hasStarted()){
+				this.dispose();
+			}
 			if(this.freezer.isSelected()){
-				new ReversiGUI(this.getBoardSize(), this.alg, 
+				new ReversiGUI(this.getBoardSize(), this.alg, this.isWhite,
 					(int)this.spinB.getValue(), (int)this.spinC.getValue(), (int)this.spinI.getValue());
 			}
-			else
-			{
-				new ReversiGUI(this.getBoardSize(), this.alg, 0,0,0);
+			else{
+				new ReversiGUI(this.getBoardSize(), this.alg, this.isWhite, 0,0,0);
 			}
 		}
 		
@@ -448,16 +470,13 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			
 		}
 		
-		if(e.getSource() == this.menu)	//menu
-		{
-			if(!this.controlPanel.isShowing())
-			{
+		if(e.getSource() == this.menu){ //menu
+			if(!this.controlPanel.isShowing()){
 				this.getContentPane().remove(this.boardPanel);
 				this.getContentPane().add(controlPanel, "cell 0 0,baseline");
 				this.controlPanel.setVisible(true);
 			}
-			else
-			{
+			else{
 				this.getContentPane().remove(this.controlPanel);
 				this.getContentPane().add(boardPanel, "cell 0 0,baseline");
 				this.controlPanel.setVisible(false);
@@ -465,10 +484,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			this.revalidate();
 			this.repaint();
 		}
-		if(e.getSource() == this.freezer)
-		{
-			if(freezer.isSelected())
-			{
+		if(e.getSource() == this.freezer){
+			if(freezer.isSelected()){
 				this.spinB.setEnabled(true);
 				this.spinC.setEnabled(true);
 				this.spinI.setEnabled(true);
@@ -476,23 +493,21 @@ public class ReversiGUI extends JFrame implements ActionListener {
 				this.spinC.setValue(this.C);
 				this.spinI.setValue(this.I);
 			}
-			else
-			{
+			else{
 				this.spinB.setEnabled(false);
 				this.spinC.setEnabled(false);
 				this.spinI.setEnabled(false);
 			}
 		}
-		if (e.getSource() == this.exitGame)
-		{
+		if (e.getSource() == this.exitGame){
 			this.dispose();
 		}
 		if(e.getSource() == this.oponentAlgoritm1)
-			this.alg = 0;
-		if(e.getSource() == this.oponentAlgoritm2)
 			this.alg = 1;
-		if(e.getSource() == this.oponentPlayer)
+		if(e.getSource() == this.oponentAlgoritm2)
 			this.alg = 2;
+		if(e.getSource() == this.oponentPlayer)
+			this.alg = 0;
 	}
 	/**
 	 * Provides size of board
@@ -567,12 +582,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	protected void gameOver(){
 		playing = false;
 		info.setText("GAMEOVER");
-		String[] buttons = { "New Game", "Exit",  };
+		// String[] buttons = { "New Game", "Exit",  };
 
 		int reply = JOptionPane.showConfirmDialog(null, "Do you wish to play again", "Congratulations you won!", JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
         	this.dispose();
-        	new ReversiGUI(this.boardSize, this.alg, this.B, this.C, this.I);
+        	new ReversiGUI(this.boardSize, this.alg, this.isWhite, this.B, this.C, this.I);
         }
         else {
         	this.dispose();
@@ -583,9 +598,9 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	/**
 	 * Will take one turn back
 	 */
-	protected void undoTurn(){
+	protected boolean undoTurn(){
 		ArrayList<Field> fields = board.undoTurn();
-		if (fields == null) return;
+		if (fields == null) return false;
 		Field remove = fields.get(fields.size()-1);
 		fields.remove(fields.size()-1);
 		remove.removeDisk();
@@ -595,7 +610,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			setColor(toTurn.getRow(), toTurn.getCol(), white);
 		}
 		btnFields[remove.getRow()-1][remove.getCol()-1].setIcon(null);;
-		
+		return true;
 	}
 	
 	/**
@@ -605,6 +620,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		
 		System.out.println("Hello World");
-		new ReversiGUI(8, 1, 0, 0, 0);
+		new ReversiGUI(8, 1, false ,0, 0, 0);
 	}
 }

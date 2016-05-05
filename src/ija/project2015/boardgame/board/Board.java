@@ -95,4 +95,8 @@ public class Board {
 	public void historyClear(){
 		history = new ArrayList<ArrayList<Field>>();
 	}
+	
+	public boolean hasStarted(){
+		return !history.isEmpty();
+	}
 }
