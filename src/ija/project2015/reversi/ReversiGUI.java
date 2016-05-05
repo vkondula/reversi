@@ -127,7 +127,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	 * @param c number of stones frozen
 	 * @param y is time between freezes
 	 */
-	public ReversiGUI(int x, int alg, boolean isWhite, int b, int c, int y, FileReader fr) {
+	public ReversiGUI(int x, int alg, boolean isWhite, int b, int c, int y, ArrayList<Field> history) {
 		// Default setting for buttons, can be changed
 		// Setting for new games
 		this.boardSize = x;
@@ -427,12 +427,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		setColor(fields[1][0], fields[1][1], false);
 		// if AI starts, make move
 		Player onTurn = game.currentPlayer();
-		if (onTurn instanceof AI && fr == null){
+		if (onTurn instanceof AI && history == null){
 			Field toPlay = ((AI)onTurn).getField();
 			resolveTurn(toPlay);
 		}
-		if (fr!=null){
-			// TODO: actual load game
+		if (history!=null){
+			doLoadedTurns(history);
 		}
 		
 	}
@@ -704,28 +704,39 @@ public class ReversiGUI extends JFrame implements ActionListener {
 					System.out.println("file is not valid savegame file");
 					return;
 				}
-				int[] properties = new int [4];
-				for(int i=0; i<4; i++)
-				{
+				int[] pr = new int [5];
+				for(int i=0; i<5; i++){
 					s = br.readLine();
-					properties[i] = Integer.parseInt(s);
-					System.out.print(properties[i]+"\n");
-					
+					pr[i] = Integer.parseInt(s);
+					System.out.print(pr[i]+"\n");
 				}
 				s = br.readLine();
-				Boolean.parseBoolean(s);
-				do
-				{		
+				boolean white = Boolean.parseBoolean(s);
+				ArrayList<Field> history = new ArrayList<Field>();
+				int row, col;
+				do{		
 					s = br.readLine();
+					String[] rc = s.split(",");
+					if (s.length()==0) {
+						history.add(null);
+						continue;
+					}
+					if (s.contains("END")) break;
+					if (rc.length==2){
+						row = Integer.parseInt(rc[0]);
+						col = Integer.parseInt(rc[1]);
+						history.add(board.getField(row, col));
+					} else {
+						System.out.println(s);
+						System.out.println("file is not valid savegame file");
+						return;
+					}
 					System.out.println(s);
-				}
-				while(s != null);
-			} catch (IOException e) {
-				
+				} while(s != null);
+				new ReversiGUI(pr[0], pr[4], white, pr[1], pr[2], pr[3], history);
+			} catch (IOException e) {	
 				e.printStackTrace();
-			}
-			
-			
+			}	
 		}
 	}
 	/**
@@ -776,6 +787,27 @@ public class ReversiGUI extends JFrame implements ActionListener {
         	}
         }
     }
+    
+    protected void doLoadedTurns(ArrayList<Field> history){
+    	int row, col;
+    	Field tmp;
+    	for (Field field : history) {
+			if (field != null) {
+				row = field.getRow();
+				col = field.getCol();
+				tmp = board.getField(row, col);
+				game.currentPlayer().putDisk(tmp);
+				ArrayList<Field> turned = rules.getTurned();
+				for (Field toTurn : turned){
+					setColor(toTurn.getRow(), toTurn.getCol(), game.currentPlayer().isWhite()); 
+				}
+				setColor(tmp.getRow(), tmp.getCol(), game.currentPlayer().isWhite());
+			}
+			game.nextPlayer();
+		}
+    	messageTurn(game.currentPlayer().isWhite());
+    }
+    
 	/**
 	 * Main Funcion
 	 * @param args is empty
