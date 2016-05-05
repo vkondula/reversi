@@ -9,6 +9,13 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JMenuBar;
@@ -28,6 +35,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 
@@ -101,8 +110,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private int alg;
 	private boolean isWhite;
 	
-	/** Method initiates new Interface and also new game 
-	 *
+	/**  
+	 * Method initiates new interface and also new game
 	 * @param x is size of board
 	 * @param alg is AI algorithm,
 	 * @param b is time in seconds for which stones stay frozen
@@ -408,7 +417,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	}
 	
 	
-	/** Method initiates new Interface and also new game 
+	/** 
+	 * Method handles interface events
 	 * @param e is event on which this method is invoked
 	 */
 	@Override
@@ -512,6 +522,11 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			this.alg = 2;
 		if(e.getSource() == this.oponentPlayer)
 			this.alg = 0;
+		
+		if(e.getSource() == this.saveGame)
+			saveGame();
+		if(e.getSource() == this.loadGame)
+			loadGame();
 	}
 	/**
 	 * Provides size of board
@@ -631,12 +646,108 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	}
 	
 	/**
+	 * Loads game from a file
+	 */
+	protected void loadGame(){
+		
+		JFileChooser fileChooser = new JFileChooser();
+		int returnValue = fileChooser.showOpenDialog(this);
+    
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+    	
+			File selectedFile = fileChooser.getSelectedFile();
+			
+			if(!selectedFile.exists() || !selectedFile.canRead())
+					System.out.println("File not exists");
+			
+			FileReader fr;
+			try {
+				fr = new FileReader(selectedFile);
+				BufferedReader br = new BufferedReader(fr);
+				String s = br.readLine();
+				System.out.println(s);
+				if (!s.contains("ReversiSave") ){
+					System.out.println("file is not valid savegame file");
+					return;
+				}
+				int[] properties = new int [4];
+				for(int i=0; i<4; i++)
+				{
+					s = br.readLine();
+					properties[i] = Integer.parseInt(s);
+					System.out.print(properties[i]+"\n");
+					
+				}
+				s = br.readLine();
+				Boolean.parseBoolean(s);
+				do
+				{		
+					s = br.readLine();
+					System.out.println(s);
+				}
+				while(s != null);
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+			
+			
+		}
+	}
+	/**
+	 * Saves game to a file
+	 * @throws IOException 
+	 */
+    protected void saveGame(){
+    	
+    	JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showSaveDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+          
+        	File selectedFile = fileChooser.getSelectedFile();
+        	System.out.println(selectedFile.getName());
+        	
+        	if(!selectedFile.exists()){
+        		try {
+					if(!selectedFile.createNewFile())
+						System.out.println("Could not create file");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+        	}
+        	try {
+        	    FileWriter fw = new FileWriter(selectedFile);
+        	    BufferedWriter bw = new BufferedWriter(fw);
+        	    bw.write("ReversiSave");								//flag
+        	    bw.newLine();
+        	    bw.append(String.valueOf(this.boardSize)+"\n");	//board size
+        	    bw.append(String.valueOf(this.B)+"\n"+String.valueOf(this.C)+"\n"+String.valueOf(this.I)+"\n"); //timers
+        	    bw.append(String.valueOf(this.isWhite)+"\n");
+        	    
+        	    for (ArrayList<Field> f : this.board.getHistory()) {
+					for (Field field : f) {
+						bw.append(String.valueOf(field.getRow())+",");	//row
+						bw.append(String.valueOf(field.getCol())+",");	//col
+						bw.append(String.valueOf(field.getDisk().isWhite())+",");	//color
+						bw.newLine();
+					}
+				}
+        	    bw.write("END");	//end stamp
+        	    bw.newLine();
+        	    bw.close();
+        	    fw.close();
+        	}
+        	catch (Exception e) {
+        	   e.printStackTrace();
+        	}
+        }
+    }
+	/**
 	 * Main Funcion
 	 * @param args is empty
 	 */
 	public static void main(String[] args) {
 		
-		System.out.println("Hello World");
 		new ReversiGUI(8, 1, false ,0, 0, 0);
 	}
 }

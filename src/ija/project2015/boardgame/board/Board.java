@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import ija.project2015.boardgame.game.Rules;
 
 public class Board {
+	
 	protected int size;
 	protected Field[][] board;
 	protected Rules rules = null;
 	protected ArrayList<ArrayList<Field>> history;
+
 	public Board(Rules rules){
 		this.rules = rules;
 		this.history = new ArrayList<ArrayList<Field>>();
@@ -111,4 +113,10 @@ public class Board {
 		}
 		return count;
 	}
+	
+	public ArrayList<ArrayList<Field>> getHistory() {
+		return history;
+	}
+
 }
+	
