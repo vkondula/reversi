@@ -483,6 +483,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
 				this.spinI.setEnabled(false);
 			}
 		}
+		if (e.getSource() == this.exitGame)
+		{
+			this.dispose();
+		}
 		if(e.getSource() == this.oponentAlgoritm1)
 			this.alg = 0;
 		if(e.getSource() == this.oponentAlgoritm2)
