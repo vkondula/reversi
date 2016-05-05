@@ -68,7 +68,6 @@ public class Board {
 	
 	@Override
 	public String toString(){
-		
 		String map = "";
 		for(int i=1; i<=size; i++){
 			for(int j=1; j<=size; j++){
