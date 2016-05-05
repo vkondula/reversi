@@ -1,5 +1,9 @@
 package ija.project2015.boardgame.board;
-
+/**
+ * TODO
+ * @author Václav Kondula, xkondu00
+ * @author Martin Kraňák, xkrajn02
+ */
 public class Disk {
 	protected boolean white;
 	public Disk(boolean isWhite){

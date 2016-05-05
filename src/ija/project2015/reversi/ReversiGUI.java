@@ -1,5 +1,9 @@
 package ija.project2015.reversi;
-
+/**
+ * Class generates UI and handles on events
+ * @author Václav Kondula, xkondu00
+ * @author Martin Kraňák, xkrajn02
+ */
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Dimension;
@@ -96,6 +100,14 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private int boardSize;
 	private int alg;
 	
+	/** Method initiates new Interface and also new game 
+	 *
+	 * @param x is size of board
+	 * @param alg is AI algorithm,
+	 * @param b is time in seconds for which stones stay frozen
+	 * @param c number of stones frozen
+	 * @param y is time between freezes
+	 */
 	public ReversiGUI(int x, int alg, int b, int c, int y) {
 		
 		this.boardSize = x;
@@ -382,7 +394,9 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	}
 	
 	
-
+	/** Method initiates new Interface and also new game 
+	 * @param e is event on which this method is invoked
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -476,11 +490,20 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		if(e.getSource() == this.oponentPlayer)
 			this.alg = 2;
 	}
-
+	/**
+	 * Provides size of board
+	 * @return size of board
+	 */
 	public int getBoardSize() {
 		return boardSize;
 	}
-
+	
+	/**
+	 * Place right ImageIcon on JButton object
+	 * @param i index of button inside array
+	 * @param j index of button inside array
+	 * @param white color of stone which will be placed on button
+	 */
 	private void setColor(int i, int j, Boolean white){
 		if (white){
 			btnFields[i-1][j-1].setIcon(this.whiteStone);
@@ -488,11 +511,18 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			btnFields[i-1][j-1].setIcon(this.blackStone);
 		}
 	}
-	
+	/**
+	 * Will set size of board
+	 * @param boardSize actual size
+	 */
 	public void setBoardSize(int boardSize) {
 		this.boardSize = boardSize;
 	}
 	
+	/**
+	 * Provides message for player
+	 * @param white indicates for which player is message viewed
+	 */
 	protected void messageTurn(Boolean white){
 		if (white)
 			info.setText("White player's turn");
@@ -500,6 +530,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			info.setText("Black player's turn");
 	}
 	
+	/**
+	 * TODO:
+	 * @param selected
+	 */
 	protected void resolveTurn(Field selected){
 		game.currentPlayer().putDisk(selected);
 		ArrayList<Field> turned = rules.getTurned();
@@ -523,6 +557,9 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			messageTurn(game.currentPlayer().isWhite());
 	}
 	
+	/**
+	 * Handles end game state
+	 */
 	protected void gameOver(){
 		playing = false;
 		info.setText("GAMEOVER");
@@ -539,6 +576,9 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		System.out.println("GAME OVER");
 	}
 	
+	/**
+	 * Will take one turn back
+	 */
 	protected void undoTurn(){
 		ArrayList<Field> fields = board.undoTurn();
 		if (fields == null) return;
@@ -555,7 +595,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	}
 	
 	/**
-	 * Launch the application.
+	 * Main Funcion
+	 * @param args is empty
 	 */
 	public static void main(String[] args) {
 		
