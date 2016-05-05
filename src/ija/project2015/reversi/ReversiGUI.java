@@ -102,13 +102,22 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private Player white;
 	private Player black;
 	private boolean playing = true;
-	
-	private int B;	//freezer values
+	// Default setting for buttons, can be changed
+	// Setting for new games
+	private int B;	
 	private int C;
 	private int I;
 	private int boardSize;
 	private int alg;
 	private boolean isWhite;
+	// Back-up of setting of current game
+	// Setting for save game
+	private int b_B;	
+	private int b_C;
+	private int b_I;
+	private int b_boardSize;
+	private int b_alg;
+	private boolean b_isWhite;
 	
 	/**  
 	 * Method initiates new interface and also new game
@@ -118,14 +127,23 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	 * @param c number of stones frozen
 	 * @param y is time between freezes
 	 */
-	public ReversiGUI(int x, int alg, boolean isWhite, int b, int c, int y) {
-		
+	public ReversiGUI(int x, int alg, boolean isWhite, int b, int c, int y, FileReader fr) {
+		// Default setting for buttons, can be changed
+		// Setting for new games
 		this.boardSize = x;
 		this.B = b;
 		this.C = c;
 		this.I = y;
 		this.alg = alg;
 		this.isWhite = isWhite;
+		// Back-up of setting of current game
+		// Setting for save game
+		this.b_boardSize = x;
+		this.b_B = b;
+		this.b_C = c;
+		this.b_I = y;
+		this.b_alg = alg;
+		this.b_isWhite = isWhite;
 		
 		JSeparator optionSep = new JSeparator();
 		JSeparator optionSep2 = new JSeparator();
@@ -409,9 +427,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		setColor(fields[1][0], fields[1][1], false);
 		// if AI starts, make move
 		Player onTurn = game.currentPlayer();
-		if (onTurn instanceof AI){
+		if (onTurn instanceof AI && fr == null){
 			Field toPlay = ((AI)onTurn).getField();
 			resolveTurn(toPlay);
+		}
+		if (fr!=null){
+			// TODO: actual load game
 		}
 		
 	}
@@ -454,6 +475,14 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			if (onTurn instanceof AI){
 				if (undoTurn()) game.nextPlayer();
 			}
+			if (!onTurn.canPlay()){
+				board.addTurn(null, new ArrayList<Field>());
+				onTurn = game.nextPlayer();
+				if (!onTurn.canPlay()){
+					gameOver();
+					return;
+				}
+			}
 			messageTurn(onTurn.isWhite());
 			if (onTurn instanceof AI){
 				Field toPlay = ((AI)onTurn).getField();
@@ -469,10 +498,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			}
 			if(this.freezer.isSelected()){
 				new ReversiGUI(this.getBoardSize(), this.alg, this.isWhite,
-					(int)this.spinB.getValue(), (int)this.spinC.getValue(), (int)this.spinI.getValue());
+					(int)this.spinB.getValue(), (int)this.spinC.getValue(), (int)this.spinI.getValue(), null);
 			}
 			else{
-				new ReversiGUI(this.getBoardSize(), this.alg, this.isWhite, 0,0,0);
+				new ReversiGUI(this.getBoardSize(), this.alg, this.isWhite, 0,0,0, null);
 			}
 		}
 		
@@ -623,7 +652,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		int reply = JOptionPane.showConfirmDialog(null, "Do you wish to play again", text, JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
         	this.dispose();
-        	new ReversiGUI(this.boardSize, this.alg, this.isWhite, this.B, this.C, this.I);
+        	new ReversiGUI(this.boardSize, this.alg, this.isWhite, this.B, this.C, this.I, null);
         }
         else {
         	this.dispose();
@@ -646,7 +675,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			boolean white = toTurn.getDisk().isWhite();
 			setColor(toTurn.getRow(), toTurn.getCol(), white);
 		}
-		btnFields[remove.getRow()-1][remove.getCol()-1].setIcon(null);;
+		btnFields[remove.getRow()-1][remove.getCol()-1].setIcon(null);
 		return true;
 	}
 	
@@ -725,9 +754,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
         	    BufferedWriter bw = new BufferedWriter(fw);
         	    bw.write("ReversiSave");								//flag
         	    bw.newLine();
-        	    bw.append(String.valueOf(this.boardSize)+"\n");	//board size
-        	    bw.append(String.valueOf(this.B)+"\n"+String.valueOf(this.C)+"\n"+String.valueOf(this.I)+"\n"); //timers
-        	    bw.append(String.valueOf(this.isWhite)+"\n");
+        	    bw.append(String.valueOf(this.b_boardSize)+"\n");	//board size
+        	    bw.append(String.valueOf(this.b_B)+"\n"+String.valueOf(this.b_C)+"\n"+String.valueOf(this.b_I)+"\n"); //timers
+        	    bw.append(String.valueOf(this.b_alg)+"\n"); //opponent
+        	    bw.append(String.valueOf(this.b_isWhite)+"\n"); //color
         	    
         	    for (Field field : this.board.getHistory()) {
 					if (field != null) {
@@ -752,6 +782,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	 */
 	public static void main(String[] args) {
 		
-		new ReversiGUI(8, 1, false ,0, 0, 0);
+		new ReversiGUI(8, 1, false ,0, 0, 0, null);
 	}
 }
