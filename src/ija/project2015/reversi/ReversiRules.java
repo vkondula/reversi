@@ -1,6 +1,6 @@
 package ija.project2015.reversi;
 /**
- * TODO
+ * Class represents set of rules for reversi games
  * @author Václav Kondula, xkondu00
  * @author Martin Kraňák, xkrajn02
  */
@@ -14,22 +14,39 @@ import java.util.ArrayList;
 public class ReversiRules implements Rules{
 	protected int size;
 	protected ArrayList<Field> turned;
+	/**
+	 * Constructor
+	 * @param size of board
+	 */
 	public ReversiRules(int size){
 		this.size = size;
 	}
 	
+	/**
+	 * Creates new field and also new Boardfield
+	 * @param row index
+	 * @param col index
+	 */
 	public Field createField(int row, int col){
 		return new BoardField(row, col, this);
 	}
-	
+	/**
+	 * Provides size of board
+	 */
 	public int getSize(){
 		return size;
 	}
-	
+	/**
+	 * Number of disk are Infite
+	 */
 	public int numberDisks(){
-		return size*size;
+		return -1;
 	}
 	
+	/**
+	 * return first 4 psitions of stones
+	 * @param isWhite color of player
+	 */
 	public int[][] getLayout(boolean isWhite){
 		int[][] layout = new int[2][2];
 		int start = size/2;
@@ -48,10 +65,17 @@ public class ReversiRules implements Rules{
 		
 	}
 	
+	/**
+	 * Black player doeasnt start
+	 */
 	public boolean whiteStart(){
 		return false;
 	}
-	
+	/**
+	 * Check whether disk with certain color can be placed on field
+	 * @param field desired field
+	 * @param disk disk to be placed
+	 */
 	public boolean canPutDisk(Field field, Disk disk){
 		if (field.getDisk()!=null) return false;
 		boolean white = disk.isWhite();
@@ -75,7 +99,11 @@ public class ReversiRules implements Rules{
 		}
 		return false;
 	}
-	
+	/**
+	 * Turns stones after placing disk
+	 * every turned disk is added to arraylist 
+	 * @param field 
+	 */
 	public void postPhase(Field field){
 		Disk disk = field.getDisk();
 		if(disk==null) return;
@@ -107,7 +135,9 @@ public class ReversiRules implements Rules{
 		}
 		
 	}
-	
+	/**
+	 * returns array that contains turned stones
+	 */
     public ArrayList<Field> getTurned() {
         return turned;
     }

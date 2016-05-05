@@ -1,6 +1,6 @@
 package ija.project2015.boardgame.board;
 /**
- * TODO 
+ * Represents the gaming board
  * @author Václav Kondula, xkondu00
  * @author Martin Kraňák, xkrajn02
  */
@@ -14,7 +14,11 @@ public class Board {
 	protected Field[][] board;
 	protected Rules rules = null;
 	protected ArrayList<ArrayList<Field>> history;
-
+	
+	/**
+	 * creates new gaming board
+	 * @param rules provides rules for game
+	 */
 	public Board(Rules rules){
 		this.rules = rules;
 		this.history = new ArrayList<ArrayList<Field>>();
@@ -53,19 +57,34 @@ public class Board {
 				
 		}
 	}
-	
+	/**
+	 * Returns field on coordinates defined by parameters
+	 * @param row
+	 * @param col
+	 * @return field
+	 */
 	public Field getField(int row, int col){
 		return board[row][col];
 	}
 	
+	/**
+	 * Provides size of board
+	 * @return size of board
+	 */
 	public int getSize(){
 		return size;
 	}
-	
+	/**
+	 * Provides rules
+	 * @return rules
+	 */
 	public Rules getRules(){
 		return rules;
 	}
 	
+	/**
+	 * 
+	 */
 	@Override
 	public String toString(){
 		String map = "";
@@ -81,6 +100,11 @@ public class Board {
 		return map;
 	}
 	
+	/**
+	 * Adds to to history
+	 * @param field
+	 * @param turned
+	 */
 	public void addTurn(Field field, ArrayList<Field> turned){
 		ArrayList<Field> tmp = new ArrayList<Field>(turned);
 		if (field != null)
@@ -88,6 +112,10 @@ public class Board {
 		history.add(tmp);
 	}
 	
+	/**
+	 * Takes one turn back
+	 * @return
+	 */
 	public ArrayList<Field> undoTurn(){
 		if (history.size() == 0) return null;
 		ArrayList<Field> retval = history.get(history.size()-1);
@@ -95,14 +123,26 @@ public class Board {
 		return retval;
 	}
 	
+	/**
+	 * Clears history of turns
+	 */
 	public void historyClear(){
 		history = new ArrayList<ArrayList<Field>>();
 	}
 	
+	/**
+	 * Indicates if game has started
+	 * @return
+	 */
 	public boolean hasStarted(){
 		return !history.isEmpty();
 	}
 	
+	/**
+	 * Provides count of stones with same color
+	 * @param isWhite
+	 * @return count
+	 */
 	public int getStonesCount(boolean isWhite){
 		int count = 0;
 		for (int i=1; i<size+1; i++){
@@ -114,7 +154,10 @@ public class Board {
 		}
 		return count;
 	}
-	
+	/**
+	 * Provides data for save
+	 * @return
+	 */
 	public ArrayList<Field> getHistory() {
 		ArrayList<Field> retval = new ArrayList<Field>();
 		for (ArrayList<Field> f : history) {

@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,7 +25,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
@@ -51,6 +49,7 @@ import ija.project2015.reversi.FieldButton;
 
 public class ReversiGUI extends JFrame implements ActionListener {
 	
+	private static final long serialVersionUID = 1L;
 	private JButton btnUndo;
 	private JButton[][] btnFields;	
 	private JPanel boardPanel;
@@ -90,7 +89,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private JSpinner spinB;
 	private JSpinner spinC;
 	private JSpinner spinI;
-	
 
 	private Color customBlueBackground;
 	private ImageIcon blackStone = new ImageIcon("images/black.png");
@@ -118,6 +116,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private int b_boardSize;
 	private int b_alg;
 	private boolean b_isWhite;
+
 	
 	/**  
 	 * Method initiates new interface and also new game
@@ -601,7 +600,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	}
 	
 	/**
-	 * TODO:
+	 * Puts disk on selected field, turn stones and resolves AI turn
 	 * @param selected
 	 */
 	protected void resolveTurn(Field selected){
@@ -793,6 +792,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
         }
     }
     
+    /**
+     * Recreates board from save file
+     * @param history fields
+     */
     protected void doLoadedTurns(ArrayList<Field> history){
     	int row, col;
     	Field tmp;
@@ -814,7 +817,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
     }
     
 	/**
-	 * Main Funcion
+	 * Main funcion
 	 * @param args is empty
 	 */
 	public static void main(String[] args) {

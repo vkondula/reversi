@@ -1,6 +1,6 @@
 package ija.project2015.reversi;
 /**
- * TODO
+ * Provides methods which can decide turn
  * @author Václav Kondula, xkondu00
  * @author Martin Kraňák, xkrajn02
  */
@@ -14,17 +14,30 @@ import ija.project2015.boardgame.board.Field;
 
 public class AI extends Player{
 	protected int alg;
+	
+	/**
+	 * Creates new AI Player
+	 * @param isWhite is Color of disks
+	 * @param difficulty 
+	 */
 	public AI(boolean isWhite, int difficulty){
 		super(isWhite);
 		this.alg = difficulty;
 	}
-	
+	/**
+	 * Provides field which will be turned
+	 * @return field to turn
+	 */
 	public Field getField(){
 		if (alg == 1) return randomField();
 		if (alg == 2) return bestField();
 		return null;
 	} 
 	
+	/**
+	 * Provides random field
+	 * @return random field
+	 */
 	protected Field randomField(){
 		ArrayList<Field> fields = new ArrayList<Field>();
 		int size = board.getSize();
@@ -42,6 +55,10 @@ public class AI extends Player{
 		return null;
 	}
 	
+	/**
+	 * Provides best possible field
+	 * @return field
+	 */
 	protected Field bestField(){
 		Field maxField = null;
 		Field tmp;
@@ -62,6 +79,11 @@ public class AI extends Player{
 		return maxField;
 	}
 	
+	/**
+	 * Counts how many opponent stones will be turned to selected field was done
+	 * @param field is field where stones will be placed
+	 * @return number of stones to be turned
+	 */
 	protected int toTurn(Field field){
 		int turning = 0;
 		for (Field.Direction dirs : Field.Direction.values()){

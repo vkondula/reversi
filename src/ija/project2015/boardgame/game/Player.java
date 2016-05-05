@@ -1,26 +1,43 @@
 package ija.project2015.boardgame.game;
 /**
- * TODO
+ * CLass declare player
  * @author Václav Kondula, xkondu00
  * @author Martin Kraňák, xkrajn02
  */
 import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.board.Disk;
+
+import com.sun.org.omg.CORBA.Initializer;
+
 import ija.project2015.boardgame.board.Board;
 
 public class Player {
+	
 	protected boolean white;
 	protected Rules rules = null;
 	protected int pool = 0;
 	protected Board board;
+	/**
+	 * Creates new player 
+	 * @param isWhite adds color of stones
+	 */
 	public Player(boolean isWhite){
 		this.white = isWhite;
 	}
 	
+	/**
+	 * Return color of player
+	 * @return color of player
+	 */
 	public boolean isWhite(){
 		return white;
 	}
 	
+	/**
+	 * Check if disk can be placed to desired location
+	 * @param field is location
+	 * @return boolean value
+	 */
 	public boolean canPutDisk(Field field){
 		if (rules != null && !emptyPool()){
 			return rules.canPutDisk(field, new Disk(white));
@@ -29,10 +46,19 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Check if pool is empty
+	 * @return boolean value
+	 */
 	public boolean emptyPool(){
 		return pool==0;
 	}
 	
+	/**
+	 * Will place disk to desired location
+	 * @param field represents location
+	 * @return boolean value which represents success of operation
+	 */
 	public boolean putDisk(Field field){
 		pool -= 1;
 		Disk disk = new Disk(white);
@@ -42,10 +68,14 @@ public class Player {
 		return retval;
 	}
 	
+	/**
+	 * Initialize player properties 
+	 * @param board provides board and rules 
+	 */
 	public void init(Board board){
 		this.board = board;
-		rules = board.getRules();
-		pool = rules.numberDisks();
+		this.rules = board.getRules();
+		this.pool = rules.numberDisks();
 		int[][] coor = rules.getLayout(white);
 		int count = (coor.length);
 		for(int i=0; i<count; i++){
@@ -54,6 +84,10 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Check if turn by player is possible
+	 * @return boolean value
+	 */
 	public boolean canPlay(){
 		int size = board.getSize();
 		for (int i=1; i<size+1; i++){
@@ -66,7 +100,11 @@ public class Player {
 		return false;
 	}
 	
-	@Override
+	/**
+	 * Converts boolean value to string
+	 * @Override
+	 * @return boolean value
+	 */
 	public String toString(){
 		if(white) return "White";
 		else return "Black";

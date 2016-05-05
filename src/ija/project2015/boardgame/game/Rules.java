@@ -1,6 +1,7 @@
 package ija.project2015.boardgame.game;
 /**
- * TODO
+ * Provides methods which handles rules of game
+ * @see ija.project2015.reversi.ReversiRules
  * @author Václav Kondula, xkondu00
  * @author Martin Kraňák, xkrajn02
  */
