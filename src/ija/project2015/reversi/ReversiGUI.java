@@ -1,9 +1,5 @@
 package ija.project2015.reversi;
-/**
- * Class generates UI and handles on events
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
- */
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Dimension;
@@ -34,8 +30,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-
-import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 
 import ija.project2015.boardgame.game.Game;
@@ -43,10 +37,15 @@ import ija.project2015.boardgame.board.Board;
 import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.game.Rules;
 import ija.project2015.reversi.ReversiRules;
+import net.miginfocom.swing.MigLayout;
 import ija.project2015.reversi.AI;
 import ija.project2015.boardgame.game.Player;
 import ija.project2015.reversi.FieldButton;
-
+/**
+ * Class generates UI and handles on events
+ * @author Václav Kondula, xkondu00
+ * @author Martin Kraňák, xkrajn02
+ */
 public class ReversiGUI extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
@@ -121,10 +120,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	/**  
 	 * Method initiates new interface and also new game
 	 * @param x is size of board
+	 * @param isWhite indicates color of player
 	 * @param alg is AI algorithm,
 	 * @param b is time in seconds for which stones stay frozen
 	 * @param c number of stones frozen
 	 * @param y is time between freezes
+	 * @param history is history to be replicated from save game
 	 */
 	public ReversiGUI(int x, int alg, boolean isWhite, int b, int c, int y, ArrayList<Field> history) {
 		// Default setting for buttons, can be changed
@@ -601,7 +602,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	
 	/**
 	 * Puts disk on selected field, turn stones and resolves AI turn
-	 * @param selected
+	 * @param selected represents field which was clicked
 	 */
 	protected void resolveTurn(Field selected){
 		game.currentPlayer().putDisk(selected);
@@ -660,6 +661,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	
 	/**
 	 * Will take one turn back
+	 * @return boolean value which indecates success of operation
 	 */
 	protected boolean undoTurn(){
 		ArrayList<Field> fields = board.undoTurn();
@@ -742,8 +744,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		}
 	}
 	/**
-	 * Saves game to a file
-	 * @throws IOException 
+	 * Saves game to a file 
 	 */
     protected void saveGame(){
     	

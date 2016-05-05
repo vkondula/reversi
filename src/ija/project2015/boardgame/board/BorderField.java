@@ -1,6 +1,6 @@
 package ija.project2015.boardgame.board;
 /**
- * TODO 
+ * Represents the border of the board
  * @author Václav Kondula, xkondu00
  * @author Martin Kraňák, xkrajn02
  */
@@ -43,7 +43,7 @@ public class BorderField implements Field {
 	}
 	/**
 	 * You cannot place disk on borderfield
-	 * @param disk
+	 * @param disk is disk to be placed
 	 * @return false
 	 */
 	public boolean	canPutDisk(Disk disk){

@@ -1,9 +1,5 @@
 package ija.project2015.reversi;
-/**
- * Provides methods which can decide turn
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
- */
+
 import ija.project2015.boardgame.game.Player;
 
 import java.util.ArrayList;
@@ -11,14 +7,18 @@ import java.util.Random;
 
 import ija.project2015.boardgame.board.Disk;
 import ija.project2015.boardgame.board.Field;
-
+/**
+ * Provides methods which can decide turn
+ * @author Václav Kondula, xkondu00
+ * @author Martin Kraňák, xkrajn02
+ */
 public class AI extends Player{
 	protected int alg;
 	
 	/**
 	 * Creates new AI Player
 	 * @param isWhite is Color of disks
-	 * @param difficulty 
+	 * @param difficulty indicates how how difficult is to play against AI
 	 */
 	public AI(boolean isWhite, int difficulty){
 		super(isWhite);

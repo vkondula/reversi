@@ -1,13 +1,11 @@
 package ija.project2015.boardgame.board;
+import java.util.ArrayList;
+import ija.project2015.boardgame.game.Rules;
 /**
  * Represents the gaming board
  * @author Václav Kondula, xkondu00
  * @author Martin Kraňák, xkrajn02
  */
-import java.util.ArrayList;
-
-import ija.project2015.boardgame.game.Rules;
-
 public class Board {
 	
 	protected int size;
@@ -59,9 +57,9 @@ public class Board {
 	}
 	/**
 	 * Returns field on coordinates defined by parameters
-	 * @param row
-	 * @param col
-	 * @return field
+	 * @param row index
+	 * @param col index
+	 * @return field on coordinates
 	 */
 	public Field getField(int row, int col){
 		return board[row][col];
@@ -83,7 +81,7 @@ public class Board {
 	}
 	
 	/**
-	 * 
+	 * Prints board to console
 	 */
 	@Override
 	public String toString(){
@@ -102,8 +100,8 @@ public class Board {
 	
 	/**
 	 * Adds to to history
-	 * @param field
-	 * @param turned
+	 * @param field which was turned
+	 * @param turned array which is joined by turn
 	 */
 	public void addTurn(Field field, ArrayList<Field> turned){
 		ArrayList<Field> tmp = new ArrayList<Field>(turned);
@@ -114,7 +112,7 @@ public class Board {
 	
 	/**
 	 * Takes one turn back
-	 * @return
+	 * @return retval success of operation
 	 */
 	public ArrayList<Field> undoTurn(){
 		if (history.size() == 0) return null;
@@ -132,7 +130,7 @@ public class Board {
 	
 	/**
 	 * Indicates if game has started
-	 * @return
+	 * @return boolean value which indicates if game started
 	 */
 	public boolean hasStarted(){
 		return !history.isEmpty();
@@ -140,8 +138,8 @@ public class Board {
 	
 	/**
 	 * Provides count of stones with same color
-	 * @param isWhite
-	 * @return count
+	 * @param isWhite color
+	 * @return count of stones
 	 */
 	public int getStonesCount(boolean isWhite){
 		int count = 0;
@@ -156,7 +154,7 @@ public class Board {
 	}
 	/**
 	 * Provides data for save
-	 * @return
+	 * @return array  with turns
 	 */
 	public ArrayList<Field> getHistory() {
 		ArrayList<Field> retval = new ArrayList<Field>();

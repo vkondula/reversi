@@ -1,12 +1,12 @@
 package ija.project2015.boardgame.board;
+
+import ija.project2015.boardgame.game.Rules;
+import java.util.HashMap;
 /**
  * Represents the part of board where the player can put disk
  * @author Václav Kondula, xkondu00
  * @author Martin Kraňák, xkrajn02
  */
-import ija.project2015.boardgame.game.Rules;
-import java.util.HashMap;
-
 public class BoardField implements Field{
 	protected int row;
 	protected int col;
@@ -116,7 +116,7 @@ public class BoardField implements Field{
 	/**
 	 * Check is disk can be placed on this field
 	 * @param disk to be placed
-	 * @return 
+	 * @return boolean value which indicates if disk can be placed on field
 	 */
 	public boolean canPutDisk(Disk disk){
 		return rules.canPutDisk(this, disk);

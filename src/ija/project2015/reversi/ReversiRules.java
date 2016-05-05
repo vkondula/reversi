@@ -1,16 +1,16 @@
 package ija.project2015.reversi;
-/**
- * Class represents set of rules for reversi games
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
- */
+
 import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.board.BoardField;
 import ija.project2015.boardgame.game.Rules;
 import ija.project2015.boardgame.board.Disk;
 import java.util.ArrayList;
 
-
+/**
+ * Class represents set of rules for reversi games
+ * @author Václav Kondula, xkondu00
+ * @author Martin Kraňák, xkrajn02
+ */
 public class ReversiRules implements Rules{
 	protected int size;
 	protected ArrayList<Field> turned;
@@ -102,7 +102,7 @@ public class ReversiRules implements Rules{
 	/**
 	 * Turns stones after placing disk
 	 * every turned disk is added to arraylist 
-	 * @param field 
+	 * @param field on which disk is placed
 	 */
 	public void postPhase(Field field){
 		Disk disk = field.getDisk();

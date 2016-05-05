@@ -1,12 +1,12 @@
 package ija.project2015.reversi;
+
+
+import javax.swing.JButton;
 /**
  * Class provides custom JButton with indexes included 
  * @author Václav Kondula, xkondu00
  * @author Martin Kraňák, xkrajn02
  */
-
-import javax.swing.JButton;
-
 public class FieldButton extends JButton {
 	
 	private static final long serialVersionUID = 7218764272181825637L;

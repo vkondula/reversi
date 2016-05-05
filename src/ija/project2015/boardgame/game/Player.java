@@ -1,16 +1,16 @@
 package ija.project2015.boardgame.game;
-/**
- * CLass declare player
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
- */
+
 import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.board.Disk;
 
 import com.sun.org.omg.CORBA.Initializer;
 
 import ija.project2015.boardgame.board.Board;
-
+/**
+ * CLass declare player
+ * @author Václav Kondula, xkondu00
+ * @author Martin Kraňák, xkrajn02
+ */
 public class Player {
 	
 	protected boolean white;
@@ -102,9 +102,9 @@ public class Player {
 	
 	/**
 	 * Converts boolean value to string
-	 * @Override
 	 * @return boolean value
 	 */
+	@Override
 	public String toString(){
 		if(white) return "White";
 		else return "Black";
