@@ -736,7 +736,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 					}
 				} while(s != null);
 				new ReversiGUI(pr[0], pr[4], white, pr[1], pr[2], pr[3], history);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				JPanel panel = new JPanel();
 				JOptionPane.showMessageDialog(panel, "Could not open file", "Error", JOptionPane.ERROR_MESSAGE);
 			}	
