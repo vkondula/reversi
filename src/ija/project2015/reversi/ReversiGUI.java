@@ -24,22 +24,19 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import java.awt.TextField;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
+
 import ija.project2015.boardgame.game.Game;
 import ija.project2015.boardgame.board.Board;
 import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.game.Rules;
 import ija.project2015.reversi.ReversiRules;
-import jdk.nashorn.internal.ir.WhileNode;
 import ija.project2015.reversi.AI;
 import ija.project2015.boardgame.game.Player;
 import ija.project2015.reversi.FieldButton;
 
 public class ReversiGUI extends JFrame implements ActionListener {
-	
-	private int boardSize;
 	
 	private JButton btnUndo;
 	private JButton[][] btnFields;	
@@ -71,6 +68,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private JButton createGame;
 	private JButton loadGame;
 	private JButton saveGame;
+	private JButton exitGame;
 	private JLabel info;
 	private JCheckBox freezer;
 	private JLabel lblI;
@@ -95,7 +93,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private int B;	//freezer values
 	private int C;
 	private int I;
-	
+	private int boardSize;
+	private int alg;
 	
 	public ReversiGUI(int x, int alg, int b, int c, int y) {
 		
@@ -103,6 +102,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		this.B = b;
 		this.C = c;
 		this.I = y;
+		this.alg = alg;
 		
 		JSeparator optionSep = new JSeparator();
 		JSeparator optionSep2 = new JSeparator();
@@ -136,8 +136,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		
 		final int size = 70;
 		final int paneSize = x*size;
-		final int windowSize = x*size+30;
-		
+		int windowSize; 
+		if(x == 6)
+			windowSize = 8*size + 30; 
+		else
+			windowSize = x*size+30;
+			
 		this.getContentPane().setMinimumSize(new Dimension(paneSize,paneSize));
 		this.getContentPane().setBackground(Color.DARK_GRAY);
 		this.setMinimumSize(new Dimension(windowSize,windowSize));
@@ -172,7 +176,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		menu.addActionListener(this);
 		menuBar.add(menu, "cell 1 0,right");
 
-		controlPanel = new JPanel(new MigLayout("alignx center, fillx "));
+		controlPanel = new JPanel(new MigLayout("alignx center, fill "));
 		controlPanel.setBackground(Color.red);
 		controlPanel.setPreferredSize(this.getSize());
 		controlPanel.setBackground(customBlueBackground);
@@ -180,18 +184,25 @@ public class ReversiGUI extends JFrame implements ActionListener {
 
 		createGame = new JButton("Create Game");
 		createGame.addActionListener(this);
+		createGame.setPreferredSize(new Dimension(100, 20));
 		loadGame = new JButton("Load Game");
 		loadGame.addActionListener(this);
+		loadGame.setPreferredSize(new Dimension(100, 20));
 		saveGame = new JButton("Save Game");
 		saveGame.addActionListener(this);
-
+		saveGame.setPreferredSize(new Dimension(100, 20));
+		exitGame = new JButton("exit Game");
+		exitGame.addActionListener(this);
+		exitGame.setPreferredSize(new Dimension(100, 20));
+		
 		gameSettings = new JLabel("Game");
 		gameSettings.setForeground(Color.WHITE);
 
 		controlPanel.add(gameSettings, "cell 0 0, left");
-		controlPanel.add(createGame, "cell 0 1,center");
-		controlPanel.add(loadGame, "cell 1 1,center");
-		controlPanel.add(saveGame, "cell 2 1,center, span");
+		controlPanel.add(createGame, "cell 0 1,right");
+		controlPanel.add(loadGame, "cell 1 1,split 2,growx");
+		controlPanel.add(saveGame);
+		controlPanel.add(exitGame, "cell 2 1,growx, span");
 
 		selectOponent = new ButtonGroup();
 		oponentAlgoritm1 = new JRadioButtonMenuItem("Algoritm 1");
@@ -199,7 +210,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		oponentAlgoritm1.setBackground(customBlueBackground);
 		oponentAlgoritm1.setForeground(Color.WHITE);
 
-		oponentAlgoritm2 = new JRadioButtonMenuItem("Algoritm 1");
+		oponentAlgoritm2 = new JRadioButtonMenuItem("Algoritm 2");
 		oponentAlgoritm2.addActionListener(this);
 		oponentAlgoritm2.setBackground(customBlueBackground);
 		oponentAlgoritm2.setForeground(Color.WHITE);
@@ -209,9 +220,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		oponentPlayer.setBackground(customBlueBackground);
 		oponentPlayer.setForeground(Color.WHITE);
 
+
+		selectOponent.add(oponentPlayer);
 		selectOponent.add(oponentAlgoritm1);
 		selectOponent.add(oponentAlgoritm2);
-		selectOponent.add(oponentPlayer);
 		
 		controlPanel.add(optionSep, "growx, wrap, span 3");
 		
@@ -305,6 +317,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		
 		controlPanel.add(blackStones, "cell 1 11,  right ");
 		controlPanel.add(whiteStones, "cell 1 12,  right ");
+		
 		
 		menuBar.add(info,"cell 2 0,right");
 		
@@ -400,17 +413,15 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		
 		if (e.getSource() == this.createGame)
 		{
-			int alg = 0;
-			if (oponentAlgoritm1.isSelected()){
-				alg = 1;
-			}
-			else if (oponentAlgoritm2.isSelected()){
-				alg = 2;
-			}
-			new ReversiGUI(this.getBoardSize(), alg, 
+			if(this.freezer.isSelected()){
+				new ReversiGUI(this.getBoardSize(), this.alg, 
 					(int)this.spinB.getValue(), (int)this.spinC.getValue(), (int)this.spinI.getValue());
+			}
+			else
+			{
+				new ReversiGUI(this.getBoardSize(), this.alg, 0,0,0);
+			}
 		}
-		
 		
 		if (e.getSource() instanceof FieldButton){
 			FieldButton button = (FieldButton) e.getSource();
@@ -458,6 +469,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 				this.spinI.setEnabled(false);
 			}
 		}
+		if(e.getSource() == this.oponentAlgoritm1)
+			this.alg = 0;
+		if(e.getSource() == this.oponentAlgoritm2)
+			this.alg = 1;
+		if(e.getSource() == this.oponentPlayer)
+			this.alg = 2;
 	}
 
 	public int getBoardSize() {
@@ -509,12 +526,16 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	protected void gameOver(){
 		playing = false;
 		info.setText("GAMEOVER");
-		JOptionPane.showMessageDialog(new JFrame(), "You won ?"); //TODO: prehral som 
-		for	(int i=0; i<boardSize; i++){
-			for	(int j=0; j<boardSize; j++){	
-				btnFields[i][j].setEnabled(false);
-			}
-		}
+		String[] buttons = { "New Game", "Exit",  };
+
+		int reply = JOptionPane.showConfirmDialog(null, "Do you wish to play again", "Congratulations you won!", JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+        	this.dispose();
+        	new ReversiGUI(this.boardSize, this.alg, this.B, this.C, this.I);
+        }
+        else {
+        	this.dispose();
+        }
 		System.out.println("GAME OVER");
 	}
 	
