@@ -451,6 +451,9 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			if (undoTurn()) game.nextPlayer();
 			if (undoTurn()) game.nextPlayer();
 			Player onTurn = game.currentPlayer();
+			if (onTurn instanceof AI){
+				if (undoTurn()) game.nextPlayer();
+			}
 			messageTurn(onTurn.isWhite());
 			if (onTurn instanceof AI){
 				Field toPlay = ((AI)onTurn).getField();
@@ -581,6 +584,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		setColor(selected.getRow(),selected.getCol(), game.currentPlayer().isWhite());
 		Player onTurn = game.nextPlayer(); 
 		if (!onTurn.canPlay()){
+			board.addTurn(null, new ArrayList<Field>());
 			onTurn = game.nextPlayer();
 			if (!onTurn.canPlay()){
 				gameOver();
@@ -633,6 +637,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	protected boolean undoTurn(){
 		ArrayList<Field> fields = board.undoTurn();
 		if (fields == null) return false;
+		if (fields.isEmpty()) return true;
 		Field remove = fields.get(fields.size()-1);
 		fields.remove(fields.size()-1);
 		remove.removeDisk();
@@ -724,13 +729,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
         	    bw.append(String.valueOf(this.B)+"\n"+String.valueOf(this.C)+"\n"+String.valueOf(this.I)+"\n"); //timers
         	    bw.append(String.valueOf(this.isWhite)+"\n");
         	    
-        	    for (ArrayList<Field> f : this.board.getHistory()) {
-					for (Field field : f) {
+        	    for (Field field : this.board.getHistory()) {
+					if (field != null) {
 						bw.append(String.valueOf(field.getRow())+",");	//row
-						bw.append(String.valueOf(field.getCol())+",");	//col
-						bw.append(String.valueOf(field.getDisk().isWhite())+",");	//color
-						bw.newLine();
+						bw.append(String.valueOf(field.getCol()));	//col
 					}
+					bw.newLine();
 				}
         	    bw.write("END");	//end stamp
         	    bw.newLine();

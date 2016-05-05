@@ -83,7 +83,8 @@ public class Board {
 	
 	public void addTurn(Field field, ArrayList<Field> turned){
 		ArrayList<Field> tmp = new ArrayList<Field>(turned);
-		tmp.add(field);
+		if (field != null)
+			tmp.add(field);
 		history.add(tmp);
 	}
 	
@@ -114,8 +115,15 @@ public class Board {
 		return count;
 	}
 	
-	public ArrayList<ArrayList<Field>> getHistory() {
-		return history;
+	public ArrayList<Field> getHistory() {
+		ArrayList<Field> retval = new ArrayList<Field>();
+		for (ArrayList<Field> f : history) {
+			if (f.isEmpty())
+				retval.add(null);
+			else
+				retval.add(f.get(f.size()-1));
+		}
+		return retval;
 	}
 
 }
