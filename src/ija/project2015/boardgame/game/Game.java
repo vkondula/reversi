@@ -11,6 +11,7 @@ public class Game {
 	protected Player white = null;
 	protected Player black = null;
 	protected Boolean whiteTurn = false;
+	protected String result = null;
 	public Game(Board board){
 		this.board = board;
 		whiteTurn = board.getRules().whiteStart();
@@ -44,9 +45,13 @@ public class Game {
 	public Player getWinningPlayer(){
 		int whiteCount = board.getStonesCount(true);
 		int blackCount = board.getStonesCount(false);
-		System.out.println(String.valueOf(whiteCount) + "/" + String.valueOf(blackCount));
+		result = String.valueOf(whiteCount) + " W/B " + String.valueOf(blackCount);
 		if(whiteCount==blackCount) return null;
 		else if (whiteCount>blackCount) return white;
 		else return black;
+	}
+	
+	public String getResult(){
+		return result;
 	}
 }

@@ -633,7 +633,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	 */
 	protected void gameOver(){
 		playing = false;
-		info.setText("GAMEOVER");
 		String text;
 		Player victorius = game.getWinningPlayer();
 		if (victorius == null) {
@@ -649,6 +648,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		} else {
 			text = "Congratulations you won!";
 		}
+		info.setText(game.getResult());
 		int reply = JOptionPane.showConfirmDialog(null, "Do you wish to play again", text, JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
         	this.dispose();
