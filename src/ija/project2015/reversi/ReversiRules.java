@@ -27,8 +27,7 @@ public class ReversiRules implements Rules{
 	}
 	
 	public int numberDisks(){
-		// ignore
-		return size*size/2;
+		return size*size;
 	}
 	
 	public int[][] getLayout(boolean isWhite){

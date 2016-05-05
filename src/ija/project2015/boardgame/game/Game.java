@@ -40,4 +40,13 @@ public class Game {
 	public Board getBoard(){
 		return board;
 	}
+	
+	public Player getWinningPlayer(){
+		int whiteCount = board.getStonesCount(true);
+		int blackCount = board.getStonesCount(false);
+		System.out.println(String.valueOf(whiteCount) + "/" + String.valueOf(blackCount));
+		if(whiteCount==blackCount) return null;
+		else if (whiteCount>blackCount) return white;
+		else return black;
+	}
 }

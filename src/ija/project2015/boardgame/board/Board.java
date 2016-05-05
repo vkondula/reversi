@@ -99,4 +99,16 @@ public class Board {
 	public boolean hasStarted(){
 		return !history.isEmpty();
 	}
+	
+	public int getStonesCount(boolean isWhite){
+		int count = 0;
+		for (int i=1; i<size+1; i++){
+			for (int j=1; j<size+1; j++){
+				Disk tmp = getField(i, j).getDisk();
+				if (tmp==null) continue;
+				if (tmp.isWhite() == isWhite) count++;
+			}	
+		}
+		return count;
+	}
 }

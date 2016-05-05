@@ -421,6 +421,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			this.isWhite= false;
 		}
 		
+		if (e.getSource() == this.sizeSix){
+			this.setBoardSize(6);
+		}
+		
 		if (e.getSource() == this.sizeEight){
 			this.setBoardSize(8);
 		}
@@ -582,9 +586,22 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	protected void gameOver(){
 		playing = false;
 		info.setText("GAMEOVER");
-		// String[] buttons = { "New Game", "Exit",  };
-
-		int reply = JOptionPane.showConfirmDialog(null, "Do you wish to play again", "Congratulations you won!", JOptionPane.YES_NO_OPTION);
+		String text;
+		Player victorius = game.getWinningPlayer();
+		if (victorius == null) {
+			text = "It's a tie!";
+		} else if (victorius instanceof AI){
+			text = "You lost!";
+		} else if ((!(white instanceof AI)&&(!(black instanceof AI)))){
+			if (victorius.isWhite()){
+				text = "White player won!";
+			} else {
+				text = "Black player won!";
+			}
+		} else {
+			text = "Congratulations you won!";
+		}
+		int reply = JOptionPane.showConfirmDialog(null, "Do you wish to play again", text, JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
         	this.dispose();
         	new ReversiGUI(this.boardSize, this.alg, this.isWhite, this.B, this.C, this.I);
