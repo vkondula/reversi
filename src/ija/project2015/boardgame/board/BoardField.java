@@ -13,6 +13,8 @@ public class BoardField implements Field{
 	protected Rules rules = null;
 	protected HashMap<Field.Direction, Field> neighbours;
 	protected Disk disk = null;
+	protected boolean locked = false;
+	protected boolean freezed = false;
 	/**
 	 * Creates new boardField
 	 * @param row index 
@@ -53,6 +55,7 @@ public class BoardField implements Field{
 	 * @return disk placed on field
 	 */
 	public Disk getDisk(){
+		if (freezed) return null;
 		return disk;
 	}
 	/**
@@ -111,6 +114,7 @@ public class BoardField implements Field{
 	 * @return boolean value returned by comparison
 	 */
 	public boolean	isEmpty(){
+		if (freezed) return false;
 		return this.disk == null;
 	}
 	/**
@@ -119,6 +123,7 @@ public class BoardField implements Field{
 	 * @return boolean value which indicates if disk can be placed on field
 	 */
 	public boolean canPutDisk(Disk disk){
+		if (freezed) return false;
 		return rules.canPutDisk(this, disk);
 	}
 	/**
@@ -127,5 +132,39 @@ public class BoardField implements Field{
 	public void removeDisk(){
 		this.disk = null;
 	}
-	
+	/**
+	 * Freeze and lock disk
+	 */
+	public void freeze(){
+		locked = true;
+		freezed = true;
+	}
+	/**
+	 * Unlock field
+	 * Called at the end of timer
+	 */
+	public void unlock(){
+		locked = false;
+	}
+	/**
+	 * Unfreeze field
+	 * Called at the end of every turn
+	 * Unfreezed only if it was unlocked first by the timer
+	 */
+	public void unfreeze(){
+		if (!locked)
+			freezed = false;
+	}
+	/**
+	 * Return whether field is frozen or not
+	 */
+	public boolean isFrozen(){
+		return freezed;
+	}
+	/**
+	 * Return whether field is locked or not
+	 */
+	public boolean isLocked(){
+		return locked;
+	}
 }

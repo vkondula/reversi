@@ -37,14 +37,14 @@ public class ReversiRules implements Rules{
 		return size;
 	}
 	/**
-	 * Number of disk are Infite
+	 * Number of disk are Infinite
 	 */
 	public int numberDisks(){
 		return -1;
 	}
 	
 	/**
-	 * return first 4 psitions of stones
+	 * return first 4 positions of stones
 	 * @param isWhite color of player
 	 */
 	public int[][] getLayout(boolean isWhite){
@@ -66,7 +66,7 @@ public class ReversiRules implements Rules{
 	}
 	
 	/**
-	 * Black player doeasnt start
+	 * Black player does start
 	 */
 	public boolean whiteStart(){
 		return false;
@@ -78,6 +78,7 @@ public class ReversiRules implements Rules{
 	 */
 	public boolean canPutDisk(Field field, Disk disk){
 		if (field.getDisk()!=null) return false;
+		if (field.isFrozen()) return false;
 		boolean white = disk.isWhite();
 		for (Field.Direction dirs : Field.Direction.values()){
 			boolean ready = false;

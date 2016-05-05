@@ -12,7 +12,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
+import javax.swing.Timer;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
@@ -99,6 +101,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private Player white;
 	private Player black;
 	private boolean playing = true;
+	private Timer Itimer = null;
+	private Timer Btimer = null;
 	// Default setting for buttons, can be changed
 	// Setting for new games
 	private int B;	
@@ -194,10 +198,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		boardPanel.setLayout(new MigLayout("gap 1px", "[" + String.valueOf(paneSize)+ ", grow]", "[" + String.valueOf(paneSize)+ ", grow]"));
 				
 		btnFields = new JButton[x][x];	
-		for	(int i=0; i<x; i++)
-		{
-			for	(int j=0; j<x; j++)
-			{	
+		for	(int i=0; i<x; i++){
+			for	(int j=0; j<x; j++){	
 				btnFields[i][j] = new FieldButton("", i+1, j+1);
 				btnFields[i][j].setBackground(new Color(0,102,153));
 				btnFields[i][j].addActionListener(this);
@@ -434,7 +436,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		if (history!=null){
 			doLoadedTurns(history);
 		}
-		
+		//Creat timers for freezing
+		//Itimer = before anything freezes
+		Random randomGenerator = new Random();
+		double msec = randomGenerator.nextDouble() * this.b_I * 1000;
+		this.Itimer = new Timer((int)msec, this);
+		this.Itimer.start();
 	}
 	
 	
@@ -559,6 +566,23 @@ public class ReversiGUI extends JFrame implements ActionListener {
 			saveGame();
 		if(e.getSource() == this.loadGame)
 			loadGame();
+		
+		if(e.getSource() == this.Itimer){
+			if (Btimer == null){	
+				Random randomGenerator = new Random();
+				lockRandomFields();
+				double msec = randomGenerator.nextDouble() * this.b_B * 1000;
+				this.Btimer = new Timer((int)msec, this);
+				Btimer.start();
+				this.Itimer.stop();
+			}
+		}
+		
+		if(e.getSource() == this.Btimer){
+			this.Btimer.stop();
+			this.Btimer = null;
+			board.unlockAllFields();
+		}
 	}
 	/**
 	 * Provides size of board
@@ -612,6 +636,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		}
 		setColor(selected.getRow(),selected.getCol(), game.currentPlayer().isWhite());
 		Player onTurn = game.nextPlayer(); 
+		board.unfreezeAllFields();
+		unfreezeAllButtons();
 		if (!onTurn.canPlay()){
 			board.addTurn(null, new ArrayList<Field>());
 			onTurn = game.nextPlayer();
@@ -626,6 +652,12 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		}
 		if (playing)
 			messageTurn(game.currentPlayer().isWhite());
+		// Freezing stones
+		if(this.b_C != 0 && !(onTurn instanceof AI)){
+			board.unfreezeAllFields();
+			unfreezeAllButtons();
+			this.Itimer.restart();	
+		}
 	}
 	
 	/**
@@ -671,6 +703,9 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		fields.remove(fields.size()-1);
 		remove.removeDisk();
 		for (Field toTurn : fields){
+			toTurn.unlock();
+			toTurn.unfreeze();
+			freezeButton(toTurn.getRow(),toTurn.getCol(), false);
 			toTurn.getDisk().turn();
 			boolean white = toTurn.getDisk().isWhite();
 			setColor(toTurn.getRow(), toTurn.getCol(), white);
@@ -736,11 +771,13 @@ public class ReversiGUI extends JFrame implements ActionListener {
 						return;
 					}
 				} while(s != null);
+				br.close();
+				fr.close();
 				new ReversiGUI(pr[0], pr[4], white, pr[1], pr[2], pr[3], history);
 			} catch (Exception e) {
 				JPanel panel = new JPanel();
 				JOptionPane.showMessageDialog(panel, "Could not open file", "Error", JOptionPane.ERROR_MESSAGE);
-			}	
+			}
 		}
 	}
 	/**
@@ -816,6 +853,50 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		}
     	messageTurn(game.currentPlayer().isWhite());
     }
+    /**
+     * Choose random fields with stones that can be locked
+     * Current player still must be able to make a move
+     */
+    protected void lockRandomFields(){
+    	ArrayList<Field> fields = board.getAllNotEmptyFields();
+    	Random randomGenerator = new Random();
+    	for (int i=0; i < this.b_C; i++){
+    		if (fields.size() > 0){
+	    		Field tmp = fields.get(randomGenerator.nextInt(fields.size()));
+	    		tmp.freeze();
+	    		if (game.currentPlayer().canPlay()){
+	    			freezeButton(tmp.getRow(),tmp.getCol(),true);
+	    		} else {
+	    			tmp.unlock();
+	    			tmp.unfreeze();
+	    		}
+	    		fields.remove(tmp);
+    		}
+    	}
+    }
+    /**
+     * Freeze or unfreeze specific filed in GUI
+     */
+    protected void freezeButton(int row, int col, boolean freeze){
+    	if (freeze){
+    		btnFields[row-1][col-1].setBackground(new Color(193,218,255));
+    	} else {
+    		btnFields[row-1][col-1].setBackground(new Color(0,102,153));
+    	}
+    }
+    
+    /**
+    * Unfreeze all fields in GUI
+    */
+    protected void unfreezeAllButtons(){
+		for	(int i=1; i<=b_boardSize; i++){
+			for	(int j=1; j<=b_boardSize; j++){	
+				if (!board.getField(i, j).isFrozen())
+					freezeButton(i,j,false);
+			}
+		}
+    }
+    
     
 	/**
 	 * Main funcion

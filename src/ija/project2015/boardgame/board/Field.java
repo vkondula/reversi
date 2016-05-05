@@ -14,6 +14,12 @@ public interface Field{
 	int getRow();
 	int getCol();
 	public void removeDisk();
+
+	public void freeze();
+	public void unlock();
+	public void unfreeze();
+	public boolean isFrozen();
+	public boolean isLocked();
 	public static enum Direction{
 		L,D,R,U,LD,LU,RD,RU;
 	}

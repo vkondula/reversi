@@ -74,7 +74,32 @@ public class BorderField implements Field {
 	 * is Empty
 	 */
 	public void removeDisk(){
-
 	}
-	
+	/**
+	 * Freeze and lock disk
+	 */
+	public void freeze(){
+	}
+	/**
+	 * Unlock field
+	 * Called at the end of timer
+	 */
+	public void unlock(){
+	}
+	/**
+	 * Unfreeze field
+	 * Called at the end of every turn
+	 * Unfreezed only if it was unlocked first by the timer
+	 */
+	public void unfreeze(){
+	}
+	/**
+	 * Return whether field is frozen or not
+	 */
+	public boolean isFrozen(){
+		return false;
+	}
+	public boolean isLocked(){
+		return false;
+	}
 }

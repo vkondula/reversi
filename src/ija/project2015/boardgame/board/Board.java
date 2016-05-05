@@ -166,6 +166,39 @@ public class Board {
 		}
 		return retval;
 	}
-
+	/**
+	 * Unlock all locked fields
+	 */
+	public void unlockAllFields(){
+		for (int i=1; i<size+1; i++){
+			for (int j=1; j<size+1; j++){
+				getField(i, j).unlock();
+			}	
+		}
+	}
+	/**
+	 * Unfreeze all not locked fields
+	 */
+	public void unfreezeAllFields(){
+		for (int i=1; i<size+1; i++){
+			for (int j=1; j<size+1; j++){
+				getField(i, j).unfreeze();
+			}	
+		}
+	}
+	/**
+	 * Return list of all fields, where are stones
+	 * @return ArrayList of Field, where are stones
+	 */
+	public ArrayList<Field> getAllNotEmptyFields(){
+		ArrayList<Field> buffer = new ArrayList<Field>();
+		for (int i=1; i<size+1; i++){
+			for (int j=1; j<size+1; j++){
+				Field tmp = getField(i, j);
+				if (tmp.getDisk()!=null) buffer.add(tmp);
+			}	
+		}
+		return buffer;
+	}
 }
 	
