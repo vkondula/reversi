@@ -657,7 +657,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
         else {
         	this.dispose();
         }
-		System.out.println("GAME OVER");
 	}
 	
 	/**
@@ -691,24 +690,28 @@ public class ReversiGUI extends JFrame implements ActionListener {
     	
 			File selectedFile = fileChooser.getSelectedFile();
 			
-			if(!selectedFile.exists() || !selectedFile.canRead())
-					System.out.println("File not exists");
+			if(!selectedFile.exists() || !selectedFile.canRead()){
+				JPanel panel = new JPanel();
+				JOptionPane.showMessageDialog(panel, "Could not open file", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+					
 			
 			FileReader fr;
 			try {
 				fr = new FileReader(selectedFile);
 				BufferedReader br = new BufferedReader(fr);
 				String s = br.readLine();
-				System.out.println(s);
+				
 				if (!s.contains("ReversiSave") ){
-					System.out.println("file is not valid savegame file");
+					JPanel panel = new JPanel();
+					JOptionPane.showMessageDialog(panel, "File is not valid savegame file", "Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 				int[] pr = new int [5];
 				for(int i=0; i<5; i++){
 					s = br.readLine();
 					pr[i] = Integer.parseInt(s);
-					System.out.print(pr[i]+"\n");
 				}
 				s = br.readLine();
 				boolean white = Boolean.parseBoolean(s);
@@ -727,15 +730,15 @@ public class ReversiGUI extends JFrame implements ActionListener {
 						col = Integer.parseInt(rc[1]);
 						history.add(board.getField(row, col));
 					} else {
-						System.out.println(s);
-						System.out.println("file is not valid savegame file");
+						JPanel panel = new JPanel();
+						JOptionPane.showMessageDialog(panel, "The file is not valid", "Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					System.out.println(s);
 				} while(s != null);
 				new ReversiGUI(pr[0], pr[4], white, pr[1], pr[2], pr[3], history);
-			} catch (IOException e) {	
-				e.printStackTrace();
+			} catch (IOException e) {
+				JPanel panel = new JPanel();
+				JOptionPane.showMessageDialog(panel, "Could not open file", "Error", JOptionPane.ERROR_MESSAGE);
 			}	
 		}
 	}
@@ -750,14 +753,14 @@ public class ReversiGUI extends JFrame implements ActionListener {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
           
         	File selectedFile = fileChooser.getSelectedFile();
-        	System.out.println(selectedFile.getName());
         	
         	if(!selectedFile.exists()){
         		try {
-					if(!selectedFile.createNewFile())
-						System.out.println("Could not create file");
+        			selectedFile.createNewFile();
 				} catch (IOException e) {
-					e.printStackTrace();
+					JPanel panel = new JPanel();
+					JOptionPane.showMessageDialog(panel, "Could not create file", "Error", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
         	}
         	try {
@@ -783,7 +786,9 @@ public class ReversiGUI extends JFrame implements ActionListener {
         	    fw.close();
         	}
         	catch (Exception e) {
-        	   e.printStackTrace();
+        		JPanel panel = new JPanel();
+				JOptionPane.showMessageDialog(panel, "Could not open file", "Error", JOptionPane.ERROR_MESSAGE);
+				return;
         	}
         }
     }
