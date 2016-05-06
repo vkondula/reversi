@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 /**
  * Class represents set of rules for reversi games
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
+ * @author Vaclav Kondula, xkondu00
+ * @author Martin Kranak, xkrajn02
  */
 public class ReversiRules implements Rules{
 	protected int size;

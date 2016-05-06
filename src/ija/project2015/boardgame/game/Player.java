@@ -3,13 +3,11 @@ package ija.project2015.boardgame.game;
 import ija.project2015.boardgame.board.Field;
 import ija.project2015.boardgame.board.Disk;
 
-import com.sun.org.omg.CORBA.Initializer;
-
 import ija.project2015.boardgame.board.Board;
 /**
  * CLass declare player
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
+ * @author Vaclav Kondula, xkondu00
+ * @author Martin Kranak, xkrajn02
  */
 public class Player {
 	

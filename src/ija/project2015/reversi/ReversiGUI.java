@@ -45,8 +45,8 @@ import ija.project2015.boardgame.game.Player;
 import ija.project2015.reversi.FieldButton;
 /**
  * Class generates UI and handles on events
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
+ * @author Vaclav Kondula, xkondu00
+ * @author Martin Kranak, xkrajn02
  */
 public class ReversiGUI extends JFrame implements ActionListener {
 	
@@ -320,7 +320,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 
 		SpinnerModel spinnerModelI = new SpinnerNumberModel(10,1,20,1);
 		SpinnerModel spinnerModelB = new SpinnerNumberModel(10,1,20,1);
-		SpinnerModel spinnerModelC = new SpinnerNumberModel(10,1,20,1);
+		SpinnerModel spinnerModelC = new SpinnerNumberModel(3,1,20,1);
 
 		lblI = new JLabel("I:");
 		lblI.setForeground(Color.white);
@@ -687,7 +687,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		int reply = JOptionPane.showConfirmDialog(null, "Do you wish to play again", text, JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
         	this.dispose();
-        	new ReversiGUI(this.boardSize, this.alg, this.isWhite, this.B, this.C, this.I, null);
+        	new ReversiGUI(this.b_boardSize, this.b_alg, this.b_isWhite, this.b_B, this.b_C, this.b_I, null);
         }
         else {
         	this.dispose();
@@ -745,6 +745,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
 				if (!s.contains("ReversiSave") ){
 					JPanel panel = new JPanel();
 					JOptionPane.showMessageDialog(panel, "File is not valid savegame file", "Error", JOptionPane.ERROR_MESSAGE);
+					br.close();
 					return;
 				}
 				int[] pr = new int [5];
@@ -771,6 +772,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 					} else {
 						JPanel panel = new JPanel();
 						JOptionPane.showMessageDialog(panel, "The file is not valid", "Error", JOptionPane.ERROR_MESSAGE);
+						br.close();
+						fr.close();
 						return;
 					}
 				} while(s != null);

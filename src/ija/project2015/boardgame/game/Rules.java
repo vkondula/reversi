@@ -8,8 +8,8 @@ import ija.project2015.boardgame.board.Disk;
 /**
  * Provides methods which handles rules of game
  * @see ija.project2015.reversi.ReversiRules
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
+ * @author Vaclav Kondula, xkondu00
+ * @author Martin Kranak, xkrajn02
  */
 public interface Rules {
 	Field createField(int row, int col);

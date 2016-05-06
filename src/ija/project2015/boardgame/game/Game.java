@@ -3,8 +3,8 @@ package ija.project2015.boardgame.game;
 import ija.project2015.boardgame.board.Board;
 /**
  * Class represents the game
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
+ * @author Vaclav Kondula, xkondu00
+ * @author Martin Kranak, xkrajn02
  */
 public class Game {
 	protected Board board = null;

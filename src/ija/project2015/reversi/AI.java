@@ -9,8 +9,8 @@ import ija.project2015.boardgame.board.Disk;
 import ija.project2015.boardgame.board.Field;
 /**
  * Provides methods which can decide turn
- * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
+ * @author Vaclav Kondula, xkondu00
+ * @author Martin Kranak, xkrajn02
  */
 public class AI extends Player{
 	protected int alg;
