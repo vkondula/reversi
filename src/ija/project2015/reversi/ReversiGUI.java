@@ -544,6 +544,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
 				this.spinB.setEnabled(true);
 				this.spinC.setEnabled(true);
 				this.spinI.setEnabled(true);
+				
+				if(this.B != 0) 	spinB.setValue(this.B);
+				if(this.C != 0) 	spinB.setValue(this.C);
+				if(this.I != 0) 	spinB.setValue(this.I);
 			}
 			else{
 				this.spinB.setEnabled(false);
@@ -898,7 +902,7 @@ public class ReversiGUI extends JFrame implements ActionListener {
     
     
 	/**
-	 * Main funcion
+	 * Main function
 	 * @param args is empty
 	 */
 	public static void main(String[] args) {
