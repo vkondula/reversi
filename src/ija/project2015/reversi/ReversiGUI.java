@@ -263,7 +263,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		oponentPlayer.setBackground(customBlueBackground);
 		oponentPlayer.setForeground(Color.WHITE);
 
-
 		selectOponent.add(oponentPlayer);
 		selectOponent.add(oponentAlgoritm1);
 		selectOponent.add(oponentAlgoritm2);
@@ -319,23 +318,25 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		freezer.addActionListener(this);
 		controlPanel.add(freezer,"cell 2 4, right, gapy 30px");
 
-		SpinnerModel spinnerModel = new SpinnerNumberModel(10,0,20,1);
+		SpinnerModel spinnerModelI = new SpinnerNumberModel(10,1,20,1);
+		SpinnerModel spinnerModelB = new SpinnerNumberModel(10,1,20,1);
+		SpinnerModel spinnerModelC = new SpinnerNumberModel(10,1,20,1);
 
 		lblI = new JLabel("I:");
 		lblI.setForeground(Color.white);
-		spinI = new JSpinner(spinnerModel);
+		spinI = new JSpinner(spinnerModelI);
 		controlPanel.add(lblI,"cell 2 5, split 2, right ");
 		controlPanel.add(spinI);
 
 		lblB = new JLabel("B:");
 		lblB.setForeground(Color.WHITE);
-		spinB = new JSpinner(spinnerModel);
+		spinB = new JSpinner(spinnerModelB);
 		controlPanel.add(lblB,"cell 2 6, split 2, right");
 		controlPanel.add(spinB);
 
 		lblC = new JLabel("C:");
 		lblC.setForeground(Color.white);
-		spinC = new JSpinner(spinnerModel);
+		spinC = new JSpinner(spinnerModelC);
 		controlPanel.add(lblC,"cell 2 7, split 2, right");
 		controlPanel.add(spinC);
 
@@ -360,7 +361,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		
 		controlPanel.add(blackStones, "cell 1 11,  right ");
 		controlPanel.add(whiteStones, "cell 1 12,  right ");
-		
 		
 		menuBar.add(info,"cell 2 0,right");
 		
@@ -398,9 +398,13 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		if(this.B != 0 || this.C != 0 || this.I != 0)
 		{
 			freezer.setSelected(true);
-			spinB.setValue(this.B);
-			spinC.setValue(this.C);
-			spinI.setValue(this.I);
+			spinB.setEnabled(true);
+			spinC.setEnabled(true);
+			spinI.setEnabled(true);
+			
+			if(this.B != 0) 	spinB.setValue(this.B);
+			if(this.C != 0) 	spinB.setValue(this.C);
+			if(this.I != 0) 	spinB.setValue(this.I);
 		}
 		else
 		{
@@ -495,8 +499,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
 				Field toPlay = ((AI)onTurn).getField();
 				resolveTurn(toPlay);
 			}
-			
-			
 		}
 		
 		if (e.getSource() == this.createGame){
@@ -542,9 +544,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
 				this.spinB.setEnabled(true);
 				this.spinC.setEnabled(true);
 				this.spinI.setEnabled(true);
-				this.spinB.setValue(this.B);
-				this.spinC.setValue(this.C);
-				this.spinI.setValue(this.I);
 			}
 			else{
 				this.spinB.setEnabled(false);
@@ -904,6 +903,6 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	 */
 	public static void main(String[] args) {
 		
-		new ReversiGUI(8, 1, false ,0, 0, 0, null);
+		new ReversiGUI(8, 1, false , 0, 0, 0, null);
 	}
 }
