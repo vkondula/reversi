@@ -26,6 +26,9 @@
 
                 <jar destfile="dest/reversi.jar" basedir="build">
                     <zipgroupfileset dir="lib" includes="*.jar"/>
+                    <fileset dir=".">
+                        <include name="lib/*.png" />
+                    </fileset>
                     <manifest>
                         <attribute name="Main-Class" value="ija.project2015.reversi.ReversiGUI"/>
                     </manifest>

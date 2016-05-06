@@ -92,8 +92,8 @@ public class ReversiGUI extends JFrame implements ActionListener {
 	private JSpinner spinI;
 
 	private Color customBlueBackground;
-	private ImageIcon blackStone = new ImageIcon("images/black.png");
-	private ImageIcon whiteStone = new ImageIcon("images/white.png");
+	private ImageIcon blackStone = new ImageIcon("lib/black.png");
+	private ImageIcon whiteStone = new ImageIcon("lib/white.png");
 	
 	private Rules rules;
 	private Board board;
@@ -153,8 +153,10 @@ public class ReversiGUI extends JFrame implements ActionListener {
 		JSeparator optionSep2 = new JSeparator();
 		
 		customBlueBackground = new Color(0,102,153);
-		blackStone = new ImageIcon("images/black.png");
-		whiteStone = new ImageIcon("images/white.png");
+		java.net.URL blackStoneURL = getClass().getResource("/lib/black.png");
+		java.net.URL WHIEStoneURL = getClass().getResource("/lib/white.png");
+		blackStone = new ImageIcon(blackStoneURL);
+		whiteStone = new ImageIcon(WHIEStoneURL);
 		
 		this.setResizable(false);
 		
