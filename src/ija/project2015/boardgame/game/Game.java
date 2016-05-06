@@ -4,7 +4,7 @@ import ija.project2015.boardgame.board.Board;
 /**
  * Class represents the game
  * @author Vaclav Kondula, xkondu00
- * @author Martin Kranak, xkrajn02
+ * @author Martin Krajnak, xkrajn02
  */
 public class Game {
 	protected Board board = null;

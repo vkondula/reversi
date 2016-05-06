@@ -46,7 +46,7 @@ import ija.project2015.reversi.FieldButton;
 /**
  * Class generates UI and handles on events
  * @author Vaclav Kondula, xkondu00
- * @author Martin Kranak, xkrajn02
+ * @author Martin Krajnak, xkrajn02
  */
 public class ReversiGUI extends JFrame implements ActionListener {
 	

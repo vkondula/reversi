@@ -5,7 +5,7 @@ import javax.swing.JButton;
 /**
  * Class provides custom JButton with indexes included 
  * @author Vaclav Kondula, xkondu00
- * @author Martin Kranak, xkrajn02
+ * @author Martin Krajnak, xkrajn02
  */
 public class FieldButton extends JButton {
 	

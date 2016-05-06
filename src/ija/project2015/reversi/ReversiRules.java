@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Class represents set of rules for reversi games
  * @author Vaclav Kondula, xkondu00
- * @author Martin Kranak, xkrajn02
+ * @author Martin Krajnak, xkrajn02
  */
 public class ReversiRules implements Rules{
 	protected int size;

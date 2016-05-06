@@ -2,7 +2,7 @@ package ija.project2015.boardgame.board;
 /**
  * Interface provides methods for fields located on board
  * @author Vaclav Kondula, xkondu00
- * @author Martin Kranak, xkrajn02
+ * @author Martin Krajnak, xkrajn02
  */
 public interface Field{
 	void addNextField(Field.Direction dirs, Field field);

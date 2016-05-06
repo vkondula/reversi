@@ -9,7 +9,7 @@ import ija.project2015.boardgame.board.Disk;
  * Provides methods which handles rules of game
  * @see ija.project2015.reversi.ReversiRules
  * @author Vaclav Kondula, xkondu00
- * @author Martin Kranak, xkrajn02
+ * @author Martin Krajnak, xkrajn02
  */
 public interface Rules {
 	Field createField(int row, int col);

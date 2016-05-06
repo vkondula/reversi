@@ -2,7 +2,7 @@ package ija.project2015.boardgame.board;
 /**
  * Class represents disk
  * @author Vaclav Kondula, xkondu00
- * @author Martin Kranak, xkrajn02
+ * @author Martin Krajnak, xkrajn02
  */
 public class Disk {
 	protected boolean white;

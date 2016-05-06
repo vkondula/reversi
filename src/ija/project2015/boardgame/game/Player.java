@@ -7,7 +7,7 @@ import ija.project2015.boardgame.board.Board;
 /**
  * CLass declare player
  * @author Vaclav Kondula, xkondu00
- * @author Martin Kranak, xkrajn02
+ * @author Martin Krajnak, xkrajn02
  */
 public class Player {
 	

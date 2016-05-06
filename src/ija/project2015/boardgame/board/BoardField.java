@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * Represents the part of board where the player can put disk
  * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
+ * @author Martin Krajňák, xkrajn02
  */
 public class BoardField implements Field{
 	protected int row;

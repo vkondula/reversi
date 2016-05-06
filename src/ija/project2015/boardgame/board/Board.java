@@ -4,7 +4,7 @@ import ija.project2015.boardgame.game.Rules;
 /**
  * Represents the gaming board
  * @author Václav Kondula, xkondu00
- * @author Martin Kraňák, xkrajn02
+ * @author Martin Krajňák, xkrajn02
  */
 public class Board {
 	
